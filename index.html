@@ -114,7 +114,7 @@
     <div class="row" id="playersGrid">
       <!-- Player card template repeated -->
       <!-- Card 1 -->
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="raider" data-aos="fade-up">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="Defender" data-aos="fade-up">
         <div class="card shadow-sm position-relative">
           <span class="badge bg-warning text-dark card-badge">Captian</span>
           <img src="image/Aathi.jpg" class="card-img-top" alt="Player 1">
@@ -126,7 +126,7 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="defender" data-aos="fade-up" data-aos-delay="50">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="Raider" data-aos="fade-up" data-aos-delay="50">
         <div class="card shadow-sm position-relative">
           <span class="badge bg-warning text-dark card-badge">Vice-Captian</span>
           <img src="image/vc.jpg" class="card-img-top" alt="Player 2">
@@ -138,7 +138,7 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="allround" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="Raider" data-aos="fade-up" data-aos-delay="100">
         <div class="card shadow-sm position-relative">
           <img src="image/karthi.jpg" class="card-img-top" alt="Player 3">
           <div class="card-body text-center">
@@ -148,7 +148,7 @@
         </div>
       </div>
 
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="allround" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="Defender" data-aos="fade-up" data-aos-delay="100">
         <div class="card shadow-sm position-relative">
           <img src="image/suresh.jpg" class="card-img-top" alt="Player 3">
           <div class="card-body text-center">
@@ -159,7 +159,7 @@
       </div>
 
       <!-- Card 4 (repeat as needed) -->
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="defender" data-aos="fade-up" data-aos-delay="150">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="Defender" data-aos="fade-up" data-aos-delay="150">
         <div class="card shadow-sm position-relative">
           <img src="image/dharshan.jpg" class="card-img-top" alt="Player 4">
           <div class="card-body text-center">
@@ -356,10 +356,10 @@
     
     function filterPlayers() {
   const filter = document.getElementById('roleFilter').value;
-  const cards = document.querySelectorAll('.player-card');
-  cards.forEach(card => {
-    const role = card.getAttribute('data-role');
-    if (filter === 'all' || role === filter) {
+  const players = document.querySelectorAll('.player-card');
+
+  players.forEach(card => {
+    if (filter === 'all' || card.dataset.role === filter) {
       card.style.display = 'block';
     } else {
       card.style.display = 'none';

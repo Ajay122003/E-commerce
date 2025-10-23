@@ -600,15 +600,6 @@ footer a:hover i {
   position: relative;
 }
 
-#players h2::after {
-  content: '';
-  width: 60px;
-  height: 4px;
-  background: #ffb400;
-  display: block;
-  margin-top: 8px;
-  border-radius: 2px;
-}
 
 /* Player card styles */
 .player-card .card {
