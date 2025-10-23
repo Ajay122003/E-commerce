@@ -104,9 +104,9 @@
       <div>
         <select id="roleFilter" class="form-select form-select-sm" style="width:180px;" onchange="filterPlayers()">
           <option value="all">All Roles</option>
-          <option value="raider">Raider</option>
-          <option value="defender">Defender</option>
-          <option value="allround">All-rounder</option>
+          <option value="Raider">Raider</option>
+          <option value="Defender">Defender</option>
+          <option value="Allround">All-rounder</option>
         </select>
       </div>
     </div>
@@ -117,7 +117,7 @@
       <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="raider" data-aos="fade-up">
         <div class="card shadow-sm position-relative">
           <span class="badge bg-warning text-dark card-badge">Captian</span>
-          <img src="https://via.placeholder.com/600x400?text=Player+1" class="card-img-top" alt="Player 1">
+          <img src="image/Aathi.jpg" class="card-img-top" alt="Player 1">
           <div class="card-body text-center">
             <h5 class="card-title mb-1">Aadhi</h5>
             <p class="mb-1">Role: Defender</p>
@@ -128,7 +128,7 @@
       <!-- Card 2 -->
       <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="defender" data-aos="fade-up" data-aos-delay="50">
         <div class="card shadow-sm position-relative">
-          <span class="badge bg-warning text-dark card-badge">Vice-Caotian</span>
+          <span class="badge bg-warning text-dark card-badge">Vice-Captian</span>
           <img src="image/vc.jpg" class="card-img-top" alt="Player 2">
           <div class="card-body text-center">
             <h5 class="card-title mb-1">Ashva</h5>
@@ -144,6 +144,16 @@
           <div class="card-body text-center">
             <h5 class="card-title mb-1">Karthi</h5>
             <p class="mb-1">Role: Raider</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="allround" data-aos="fade-up" data-aos-delay="100">
+        <div class="card shadow-sm position-relative">
+          <img src="image/suresh.jpg" class="card-img-top" alt="Player 3">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-1">Suresh</h5>
+            <p class="mb-1">Role: Defender</p>
           </div>
         </div>
       </div>
@@ -238,22 +248,60 @@
 
 
   <!-- Gallery Section with scrolling effect -->
-<section id="gallery" class="py-5">
+
+
+
+<section id="gallery" class="py-5 bg-light">
   <div class="container">
-    <h2 class="mb-4" data-aos="fade-up">Gallery</h2>
-    <div class="gallery-marquee">
-      <div class="gallery-track">
-        <img src="image/gallary1.jpg" class="gallery-img" alt="g1">
-        <img src="image/gallary2.jpg" class="gallery-img" alt="g2">
-        <img src="image/gallary3.jpg" class="gallery-img" alt="g3">
-        <img src="image/gallary4.jpg" class="gallery-img" alt="g1">
-        <img src="image/gallary2.jpg" class="gallery-img" alt="g2">
-        <img src="image/gallary5.jpg" class="gallery-img" alt="g3">
-   
+    <h2 class="mb-5 text-center" data-aos="fade-up">Gallery</h2>
+
+    <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <div class="carousel-item active">
+          <div class="row justify-content-center">
+            <div class="col-md-4">
+              <img src="image/gallary1.jpg" class="d-block w-100 rounded" alt="Gallery 1">
+            </div>
+            <div class="col-md-4">
+              <img src="image/gallary2.jpg" class="d-block w-100 rounded" alt="Gallery 2">
+            </div>
+            <div class="col-md-4">
+              <img src="image/gallary3.jpg" class="d-block w-100 rounded" alt="Gallery 3">
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-md-4">
+              <img src="image/gallary4.jpg" class="d-block w-100 rounded" alt="Gallery 4">
+            </div>
+            <div class="col-md-4">
+              <img src="image/gallary5.jpg" class="d-block w-100 rounded" alt="Gallery 5">
+            </div>
+            <div class="col-md-4">
+              <img src="image/gallary1.jpg" class="d-block w-100 rounded" alt="Gallery 1">
+            </div>
+          </div>
+        </div>
+
       </div>
+
+      <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-primary me-2" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+          Prev
+        </button>
+        <button class="btn btn-primary" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+          Next
+        </button>
     </div>
   </div>
 </section>
+
+
+
+
 
 
   <!-- Contact Section -->
