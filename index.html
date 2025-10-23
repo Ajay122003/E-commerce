@@ -96,25 +96,72 @@
   </div>
 
   <!-- Team Section -->
-  <section id="team" class="py-5">
-    <div class="container">
-      <h2 class="mb-4" data-aos="fade-up">Team Roster</h2>
-      <div class="row g-4" id="playersList">
-        <!-- Sample Player Card -->
-        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="card team-card h-100">
-            <img src="https://via.placeholder.com/600x400/1f2937/fff?text=Player+1" class="card-img-top" alt="Player 1">
-            <div class="card-body">
-              <h5 class="card-title">Aathi <span class="badge bg-warning text-dark">Captain</span></h5>
-              <p class="card-text mb-1">Position: All-Rounder</p>
-              <p class="card-text text-muted small">Age: 23 • Experience: 6 yrs</p>
-            </div>
-          </div>
-        </div>
-        <!-- More players can be added here -->
+  <!-- PLAYERS -->
+<section id="players" class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 data-aos="fade-up">Players</h2>
+      <div>
+        <select id="roleFilter" class="form-select form-select-sm" style="width:180px;" onchange="filterPlayers()">
+          <option value="all">All Roles</option>
+          <option value="raider">Raider</option>
+          <option value="defender">Defender</option>
+          <option value="allround">All-rounder</option>
+        </select>
       </div>
     </div>
-  </section>
+
+    <div class="row" id="playersGrid">
+      <!-- Player card template repeated -->
+      <!-- Card 1 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="raider" data-aos="fade-up">
+        <div class="card shadow-sm position-relative">
+          <span class="badge bg-warning text-dark card-badge">Captian</span>
+          <img src="https://via.placeholder.com/600x400?text=Player+1" class="card-img-top" alt="Player 1">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-1">Aadhi</h5>
+            <p class="mb-1">Role: Defender</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="defender" data-aos="fade-up" data-aos-delay="50">
+        <div class="card shadow-sm position-relative">
+          <span class="badge bg-warning text-dark card-badge">Vice-Caotian</span>
+          <img src="image/vc.jpg" class="card-img-top" alt="Player 2">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-1">Ashva</h5>
+            <p class="mb-1">Role: Raider</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="allround" data-aos="fade-up" data-aos-delay="100">
+        <div class="card shadow-sm position-relative">
+          <img src="image/karthi.jpg" class="card-img-top" alt="Player 3">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-1">Karthi</h5>
+            <p class="mb-1">Role: Raider</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 (repeat as needed) -->
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="defender" data-aos="fade-up" data-aos-delay="150">
+        <div class="card shadow-sm position-relative">
+          <img src="image/dharshan.jpg" class="card-img-top" alt="Player 4">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-1">Dharshan</h5>
+            <p class="mb-1">Role: Defender</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
   <!-- Achievements Section -->
   <section id="achievements" class="py-5">
@@ -254,9 +301,25 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
   <script>
     AOS.init({ once: true });
+    
+    function filterPlayers() {
+  const filter = document.getElementById('roleFilter').value;
+  const cards = document.querySelectorAll('.player-card');
+  cards.forEach(card => {
+    const role = card.getAttribute('data-role');
+    if (filter === 'all' || role === filter) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+
 
     // Navbar scroll effect
     window.addEventListener('scroll', function () {
