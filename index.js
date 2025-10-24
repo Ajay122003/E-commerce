@@ -107,22 +107,4 @@ if (galleryContainer) {
     .join('');
 }
 
-// ===== Navbar Scroll Effect =====
-window.addEventListener('scroll', () => {
-  const nav = document.querySelector('.navbar');
-  if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// ===== Navbar Toggler Animation =====
-const toggler = document.querySelector('.navbar-toggler');
-if (toggler) {
-  toggler.addEventListener('click', () => {
-    toggler.classList.toggle('collapsed');
-  });
-}
-
-// ===== Tournament Registration =====
-
-
-// ===== Contact Form =====
 
