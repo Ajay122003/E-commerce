@@ -109,7 +109,7 @@ body {
   box-shadow: 0 0.25rem 1.25rem var(--shadow-dark);
 }
 .navbar.fixed-top {
-  width: 100vw; /* Force navbar to always span full viewport width */
+  width: 100%; /* Force navbar to always span full viewport width */
 }
 
 /* Mobile Menu */
@@ -405,7 +405,7 @@ footer a:hover {
 .player-card .card {
   border-radius: 0.9375rem;
   overflow: hidden;
-  background: rgba(255,255,255,0.9);
+  background: #F7F7F7;
   backdrop-filter: blur(0.5rem);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   cursor: pointer;
