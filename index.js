@@ -20,21 +20,25 @@ function renderPlayers(filter = "all") {
 
   grid.innerHTML = players
     .filter(p => filter === "all" || p.role === filter)
-    .map((p, i) => `
-      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="${p.role}" data-aos="fade-up" data-aos-delay="${i * 50}">
-        <div class="card shadow-sm position-relative">
-          ${p.badge ? `<span class="badge bg-warning text-dark card-badge">${p.badge}</span>` : ""}
-          <img src="${p.image}" class="card-img-top" alt="${p.name}">
-          <div class="card-body text-center">
-            <h5 class="card-title mb-1">${p.name}</h5>
-            <p class="mb-1">Role: ${p.role.replace("Allround", "All-Rounder")}</p>
-            <button class="btn btn-sm btn-outline-primary" onclick="openPlayerModal(${i})">View Profile</button>
+    .map(p => {
+      const idx = players.findIndex(player => player.name === p.name); // Original index
+      return `
+        <div class="col-6 col-md-4 col-lg-3 mb-4 player-card" data-role="${p.role}" data-aos="fade-up">
+          <div class="card shadow-sm position-relative">
+            ${p.badge ? `<span class="badge bg-warning text-dark card-badge">${p.badge}</span>` : ""}
+            <img src="${p.image}" class="card-img-top" alt="${p.name}">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-1">${p.name}</h5>
+              <p class="mb-1">Role: ${p.role.replace("Allround", "All-Rounder")}</p>
+              <button class="btn btn-sm btn-outline-primary" onclick="openPlayerModal(${idx})">View Profile</button>
+            </div>
           </div>
         </div>
-      </div>
-    `)
+      `;
+    })
     .join("");
 }
+
 
 function filterPlayers() {
   const value = document.getElementById("roleFilter")?.value;
