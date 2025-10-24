@@ -122,38 +122,7 @@ if (toggler) {
 }
 
 // ===== Tournament Registration =====
-const form = document.getElementById('tournamentForm');
-const list = document.getElementById('registeredTeams');
-let teams = JSON.parse(localStorage.getItem('teamsArray')) || [];
 
-function renderTeams() {
-  if (!list) return;
-  list.innerHTML = teams.map(t => `<li class="list-group-item bg-dark text-light">${escapeHtml(t.name)} — ${escapeHtml(t.captain)}</li>`).join('');
-}
-
-function escapeHtml(s) {
-  return (s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-}
-
-renderTeams();
-
-if (form) {
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const [name, captain, email, phone] = Array.from(form.querySelectorAll('input')).map(i => i.value);
-    teams.push({ name, captain, email, phone });
-    localStorage.setItem('teamsArray', JSON.stringify(teams));
-    renderTeams();
-    form.reset();
-  });
-}
 
 // ===== Contact Form =====
-const contactForm = document.getElementById("contactForm");
-if (contactForm) {
-  contactForm.addEventListener("submit", e => {
-    e.preventDefault();
-    alert("Your message has been sent successfully!");
-    contactForm.reset();
-  });
-}
+
