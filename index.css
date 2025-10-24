@@ -19,6 +19,7 @@ html {
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden; 
 }
 
 /* ===== Navbar ===== */
@@ -106,6 +107,9 @@ body {
   background: rgba(26,26,26,0.95);
   padding: 0.5rem 2rem;
   box-shadow: 0 0.25rem 1.25rem var(--shadow-dark);
+}
+.navbar.fixed-top {
+  width: 100vw; /* Force navbar to always span full viewport width */
 }
 
 /* Mobile Menu */
