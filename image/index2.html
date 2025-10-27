@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ta">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thangapandi 7s | TTN Academy</title>
+
+  <!-- Bootstrap & Icons & AOS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+  /* ===============================
+     GLOBAL & VARIABLES
+     =============================== */
+  :root{
+    --gold:#ffc107;
+    --gold-600:#ffb300;
+    --dark-1:#0f0c29;
+    --dark-2:#24243e;
+    --glass: rgba(255,255,255,0.06);
+    --glass-strong: rgba(0,0,0,0.6);
+    --shadow: rgba(0,0,0,0.45);
+    --trans: 0.25s ease;
+  }
+
+  /* Prevent horizontal overflow */
+  html,body{
+    overflow-x:hidden;
+    width:100%;
+    height:100%;
+    margin:0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background: linear-gradient(120deg, var(--dark-1), #302b63, var(--dark-2));
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a { text-decoration:none; }
+
+  img { max-width:100%; height:auto; display:block; }
+
+  /* ===============================
+     NAVBAR (logo + glass blur + responsive)
+     =============================== */
+  .navbar {
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index:9999;
+    background: transparent;
+    padding:0.5rem 1rem;
+    transition: background 0.35s var(--trans), backdrop-filter 0.35s var(--trans), box-shadow 0.35s var(--trans);
+  }
+  .navbar.scrolled{
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 6px 24px var(--shadow);
+  }
+  .nav-brand-wrap { display:flex; align-items:center; gap:0.6rem; }
+  .nav-logo{
+    width:44px; height:44px; border-radius:50%; object-fit:cover;
+    border:2px solid var(--gold); box-shadow:0 6px 20px rgba(255,193,7,0.25);
+    transition: transform 0.25s var(--trans);
+  }
+  .nav-logo:hover{ transform:scale(1.08); }
+
+  .navbar-brand { color:var(--gold); font-weight:700; letter-spacing:0.4px; }
+  .nav-link { color:#fff !important; font-weight:600; padding:0.45rem 0.8rem; transition: color .2s var(--trans); }
+  .nav-link:hover, .nav-link.active { color:var(--gold) !important; transform:translateY(-2px); }
+
+  .navbar-toggler { border: none; background: none; }
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffc107' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.7)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+  /* Ensure collapsed menu not overflowing */
+  .navbar-collapse { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+
+  /* ===============================
+     HERO / HOME
+     =============================== */
+  .home-section { padding-top:82px; min-height:72vh; display:flex; align-items:center; }
+  .hero-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius: 14px;
+    padding:2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .team-logo-lg { width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid var(--gold); box-shadow:0 8px 30px rgba(255,193,7,0.15); }
+
+  .hero h1 { color:var(--gold); font-weight:800; letter-spacing:1px; margin:0 0 0.6rem; }
+  .hero p { color:#e6e6e6; margin:0 0 1rem; }
+
+  .social-icons a { display:inline-block; width:38px; height:38px; line-height:38px; text-align:center; border-radius:50%; background:var(--gold); color:#111; margin-right:0.5rem; }
+  .social-icons a:hover{ transform:translateY(-3px); }
+
+  /* Stats */
+  .stat-card {
+    background: var(--glass); padding:1.1rem; border-radius:12px; text-align:center; color:var(--gold);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  }
+
+  /* ===============================
+     TICKER
+     =============================== */
+  .ticker { background:var(--gold); color:#111; font-weight:700; padding:0.45rem 0; overflow:hidden; white-space:nowrap; }
+  .ticker .text { display:inline-block; padding-left:120%; animation: tickerMove 20s linear infinite; }
+  @keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-100%);} }
+  .ticker:hover .text { animation-play-state:paused; }
+
+  /* ===============================
+     PLAYERS GRID
+     =============================== */
+  #players { padding:3.5rem 0; }
+  .player-card { border-radius:12px; overflow:hidden; background:#fff; color:#111; transition: transform .25s var(--trans), box-shadow .25s var(--trans); }
+  .player-card:hover{ transform: translateY(-8px); box-shadow:0 18px 40px rgba(0,0,0,0.35); }
+  .player-card .role { font-size:0.85rem; color:var(--gold); font-weight:700; }
+
+  /* Modal player */
+  #playerModal .modal-content { border-radius:12px; overflow:hidden; }
+  #playerModal .player-img { width:160px; height:160px; border-radius:50%; object-fit:cover; border:3px solid var(--gold); }
+
+  /* ===============================
+     ACHIEVEMENTS
+     =============================== */
+  #achievements .team-card { background:var(--glass); border-radius:12px; padding:1rem; color:#fff; border:1px solid rgba(255,255,255,0.03); }
+
+  /* ===============================
+     TOURNAMENT FORM
+     =============================== */
+  .glass-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius:12px; padding:1.25rem; border:1px solid rgba(255,255,255,0.03); }
+  .form-label { color:var(--gold); font-weight:700; }
+
+  /* ===============================
+     GALLERY (Carousel)
+     =============================== */
+  #gallery .carousel-item img { height:220px; object-fit:cover; border-radius:10px; }
+
+  /* ===============================
+     CONTACT & MAP
+     =============================== */
+  #contact .glass-card { padding:1rem; }
+  iframe { border:0; border-radius:12px; }
+
+  /* ===============================
+     FOOTER
+     =============================== */
+  footer { padding:1.5rem 0; background:rgba(0,0,0,0.55); border-top:1px solid rgba(255,193,7,0.06); }
+
+  /* ===============================
+     SMALL SCREEN FIXES
+     =============================== */
+  @media (max-width: 768px) {
+    .hero h1 { font-size:1.8rem; }
+    .hero p { font-size:0.95rem; }
+    .nav-logo { width:40px; height:40px; }
+    .player-card .card-img-top { height:180px; object-fit:cover; }
+    .navbar.scrolled { padding:0.5rem 0.8rem; }
+    /* disable transform hover on small screens to avoid overflow */
+    .player-card:hover { transform:none; box-shadow:none; }
+    .stat-card:hover { transform:none; }
+  }
+
+  /* ===============================
+     UTILS
+     =============================== */
+  .mb-1-5 { margin-bottom:1.5rem; }
+  .text-gold { color:var(--gold); font-weight:800; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand nav-brand-wrap" href="#home">
+        <img src="image/logo.jpg" alt="TTN Logo" class="nav-logo">
+        <div>
+          <div style="font-size:0.95rem">TTN Academy</div>
+          <small style="font-size:0.7rem;color:#ddd">Thangapandi 7s</small>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#players">Players</a></li>
+          <li class="nav-item"><a class="nav-link" href="#achievements">Achievements</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tournament">Tournament</a></li>
+          <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO / HOME -->
+  <section id="home" class="home-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4">
+          <div class="hero-card" data-aos="fade-right">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <img src="image/logo.jpg" alt="TTN Logo" class="team-logo-lg">
+              <div>
+                <h1>Thangapandi 7s</h1>
+                <p class="mb-0">டீம்: <strong class="text-gold">TTN Academy</strong></p>
+                <p class="mb-0"><i class="bi bi-geo-alt-fill"></i> Thiruvalluvar Nagar, CK Mangalam</p>
+              </div>
+            </div>
+
+            <p>Thangapandi 7s — நம் அணிக்கு வரவேற்பு! Excitement, discipline & victory — all under one roof.</p>
+
+            <div class="d-flex gap-2 mb-3 social-icons">
+              <a href="#" title="YouTube"><i class="bi bi-youtube"></i></a>
+              <a href="#" title="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" title="X/Twitter"><i class="bi bi-twitter"></i></a>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-4">
+                <div class="stat-card">
+                  22 <br><small style="color:#ddd">Players</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card">
+                  24 <br><small style="color:#ddd">Matches</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card">
+                  12 <br><small style="color:#ddd">Wins</small>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-lg-6 text-center" data-aos="fade-left">
+          <img src="image/players.jpg" alt="Players" class="rounded-4 shadow-lg p-2" style="max-width:420px;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="text">Upcoming Tournament: Thangapandi 7s present | Thiruvalluvar Nagar | Jan 16 - Jan 17 | Welcome — Under 55 Kg</div>
+  </div>
+
+  <!-- PLAYERS -->
+  <section id="players" class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 data-aos="fade-up">Players — அணியினர்</h2>
+        <div>
+          <select id="roleFilter" class="form-select form-select-sm" style="width:180px" onchange="filterPlayers()">
+            <option value="all">All Roles</option>
+            <option value="Raider">Raider</option>
+            <option value="Defender">Defender</option>
+            <option value="Allround">All-rounder</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-4" id="playersGrid">
+        <!-- Player cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Player Modal -->
+  <div class="modal fade" id="playerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header border-0">
+          <h5 id="playerModalName" class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="playerModalImg" src="" alt="player" class="player-img mb-3">
+          <p><strong>Role:</strong> <span id="playerModalRole"></span></p>
+          <p id="playerModalStats"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements" class="py-5">
+    <div class="container">
+      <h2 data-aos="fade-up">Achievements 🏆</h2>
+      <div class="row g-4 mt-2">
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="team-card text-center">
+            <img src="image/trophy1.jpg" alt="trophy" class="img-fluid mb-3" style="border-radius:10px;">
+            <h5 class="text-gold">1st Prize</h5>
+            <p>TS Sports Club — Oct 2025</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="team-card text-center">
+            <img src="image/trophy2.jpg" alt="trophy" class="img-fluid mb-3" style="border-radius:10px;">
+            <h5 class="text-gold">1st Prize</h5>
+            <p>TTN Academy — Sep 2025</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
+          <div class="team-card text-center">
+            <img src="image/trophy3.jpg" alt="trophy" class="img-fluid mb-3" style="border-radius:10px;">
+            <h5 class="text-gold">Fair Play</h5>
+            <p>Pillaranthal — Feb 2025</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENT FORM -->
+  <section id="tournament" class="py-5">
+    <div class="container">
+      <h2 data-aos="fade-up">Tournament Registration 🏟️</h2>
+      <div class="row mt-4">
+        <div class="col-lg-6" data-aos="fade-right">
+          <form id="tournamentForm" class="glass-card">
+            <div class="mb-3">
+              <label class="form-label">Team Name</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Captain Name</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contact Number</label>
+              <input type="tel" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Register Team</button>
+          </form>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="glass-card">
+            <h5 class="text-gold">Rules & Info</h5>
+            <p>16-17 Jan 2026 | Venue: Thiruvalluvar Nagar — Under 55 Kg category</p>
+            <ul>
+              <li>Match rules as per local association</li>
+              <li>Contact on arrival desk for team check-in</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="py-5 bg-light" style="background:transparent;">
+    <div class="container">
+      <h2 data-aos="fade-up" class="text-white">Gallery</h2>
+      <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up">
+        <div class="carousel-inner" id="galleryInner">
+          <div class="carousel-item active">
+            <img src="image/gallery1.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="image/gallery2.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="image/gallery3.jpg" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-5">
+    <div class="container">
+      <h2 data-aos="fade-up">Contact Us</h2>
+      <div class="row mt-4">
+        <div class="col-lg-6" data-aos="fade-right">
+          <form id="contactForm" class="glass-card">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Send Message</button>
+          </form>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <iframe width="100%" height="320" src="https://maps.google.com/maps?q=thiruvadanai&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="text-center">
+    <div class="container">
+      <div class="mb-2">© 2025 Thangapandi 7s | TTN Academy</div>
+      <div>
+        <a href="#" class="me-2"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="me-2"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="me-2"><i class="bi bi-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+  AOS.init({ duration:700, once:true });
+
+  /* Navbar scroll glass effect */
+  const navbar = document.querySelector('.navbar');
+  function onScrollNav(){
+    if(window.scrollY > 40) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScrollNav);
+  onScrollNav();
+
+  /* Players data (example). Replace paths with your images */
+  const players = [
+    { name:"Aadhi", role:"Defender", image:"image/player1.jpg", badge:"Captain", stats:"Strong blocker • Height: 6'0\""},
+    { name:"Ashva", role:"Allround", image:"image/player2.jpg", stats:"Quick raider • Agile" },
+    { name:"Karthi", role:"Raider", image:"image/player3.jpg", stats:"Sharp moves • Fast" },
+    { name:"Santhosh", role:"Defender", image:"image/player4.jpg", stats:"Tackle specialist" },
+    { name:"Vijay", role:"Raider", image:"image/player5.jpg", stats:"Speedy attacker" },
+    { name:"Ramesh", role:"Allround", image:"image/player6.jpg", stats:"Versatile player" }
+  ];
+
+  const playersGrid = document.getElementById('playersGrid');
+
+  function renderPlayers(list){
+    playersGrid.innerHTML = '';
+    list.forEach((p, idx) => {
+      const col = document.createElement('div');
+      col.className = 'col-sm-6 col-md-4';
+      col.innerHTML = `
+        <div class="player-card card">
+          <img src="${p.image}" class="card-img-top" alt="${p.name}">
+          <div class="card-body">
+            <h5 class="card-title">${p.name}</h5>
+            <p class="role mb-2">${p.role}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <button class="btn btn-outline-warning btn-sm" onclick="openPlayer(${idx})">View</button>
+              <small class="text-muted">${p.badge || ''}</small>
+            </div>
+          </div>
+        </div>
+      `;
+      playersGrid.appendChild(col);
+    });
+  }
+
+  renderPlayers(players);
+
+  function openPlayer(i){
+    const p = players[i];
+    document.getElementById('playerModalName').innerText = p.name;
+    document.getElementById('playerModalImg').src = p.image;
+    document.getElementById('playerModalRole').innerText = p.role;
+    document.getElementById('playerModalStats').innerText = p.stats || '';
+    const modal = new bootstrap.Modal(document.getElementById('playerModal'));
+    modal.show();
+  }
+
+  /* Filter players by role */
+  function filterPlayers(){
+    const val = document.getElementById('roleFilter').value;
+    if(val === 'all') renderPlayers(players);
+    else renderPlayers(players.filter(p => p.role === val));
+  }
+
+  /* Simple form handlers (no backend) */
+  document.getElementById('tournamentForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Team registered! (demo)\nWe will contact via email.');
+    this.reset();
+  });
+
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Message sent! (demo)');
+    this.reset();
+  });
+
+  /* Gallery: auto populate (optional) */
+  // You can programmatically add items to galleryInner if needed.
+
+  // Prevent accidental horizontal overflow on load
+  window.addEventListener('resize', ()=> { document.documentElement.style.width = '100%'; });
+  </script>
+</body>
+</html>

@@ -26,78 +26,71 @@ body {
 
 /* ======= Navbar ======= */
 .navbar {
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 0.6rem 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 9999;
+  background: black; 
+  padding: 0.55rem 1rem;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, box-shadow 0.35s ease, padding 0.25s ease;
 }
 
-.navbar-brand {
-  color: #ffc107 !important;
-  font-weight: 700;
-  font-size: 1.2rem;
-  letter-spacing: 0.5px;
+.navbar.scrolled {
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  padding: 0.45rem 1rem;
 }
 
+
+.nav-brand-wrap{ display:flex; align-items:center; gap:0.6rem; }
+.navbar-brand { color: #ffc107; font-weight:700; letter-spacing:0.4px; }
 .nav-logo {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ffc107;
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width:44px; height:44px; border-radius:50%; object-fit:cover;
+  border:2px solid #ffc107;
+  box-shadow: 0 6px 20px rgba(255,193,7,0.18);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
+.nav-logo:hover { transform: scale(1.08); }
 
-.nav-logo:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(255, 193, 7, 0.9);
-}
 
-.nav-link {
-  color: #fff !important;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
+.nav-link { color:#fff !important; font-weight:600; padding:0.45rem 0.8rem; transition: color .2s ease, transform .2s ease; }
+.nav-link:hover, .nav-link.active { color:#ffc107 !important; transform: translateY(-2px); }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #ffc107 !important;
-  transform: scale(1.05);
-}
 
-.navbar-toggler {
-  border: none;
-  background: none;
-}
-
-.navbar-toggler:focus {
-  box-shadow: none;
-}
-
+.navbar-toggler { border: none; background: none; }
+.navbar-toggler:focus { box-shadow: none; outline: none; }
 .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffc107' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.7)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+
+  width: 32px; height: 24px;
 }
 
-/* Mobile Menu */
-@media (max-width: 768px) {
-  .navbar {
-    background: rgba(0, 0, 0, 0.9);
-  }
+/* ensure collapsed menu has padding and doesn't overflow */
+.navbar-collapse {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* mobile specific */
+@media (max-width: 991px) {
+  .navbar { padding: 0.45rem 0.75rem; }
+  .navbar.scrolled { padding: 0.35rem 0.75rem; }
   .navbar-nav {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0,0,0,0.85);
     border-radius: 10px;
-    padding: 1rem 0;
+    padding: 0.8rem 0.5rem;
+    margin-top: 0.5rem;
   }
-  .nav-link {
-    display: block;
-    padding: 0.75rem;
-  }
+  .nav-link { display:block; padding: 0.6rem 1rem; }
+  /* avoid large logo pushing menu: slightly smaller */
+  .nav-logo { width:40px; height:40px; }
 }
 
+/* Prevent any horizontal overflow issues */
+html, body { overflow-x: hidden; width: 100%; }
 
 
 /* ===== Home Section ===== */
