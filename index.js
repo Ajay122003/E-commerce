@@ -12,6 +12,11 @@ const players = [
   { name: "Viswa", role: "Raider", image: "image/Viswa.jpg" },
   { name: "Sanjey", role: "Allround", image: "image/Sanjey.jpg" },
   { name: "Sabari", role: "Allround", image: "image/Sabari.jpg" },
+  { name: "Vishnu", role: "Allround", image: "image/vishnu.jpg" },
+  { name: "Vishal", role: "Raider", image: "" },
+  { name: "Raja", role: "Allround", image: "" },
+  { name: "Sankar", role: "Allround", image: "" },
+  { name: "Ajay", role: "Allround", image: "" }
 ];
 
 function renderPlayers(filter = "all") {
