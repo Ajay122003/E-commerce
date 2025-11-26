@@ -414,3 +414,40 @@ footer a:hover {
 }
 
 
+
+    .sponsor-section {
+      padding: 50px 0;
+      background: var(--bg-gradient)
+    }
+
+    .sponsor-title {
+      font-weight: 700;
+      font-size: 32px;
+      color : var(--primary-color)
+    }
+
+    .sponsor-card {
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #e3e3e3;
+      padding: 15px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .sponsor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+    }
+
+    .sponsor-card img {
+      max-height: 100px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .sponsor-name {
+      font-weight: 600;
+      margin-top: 5px;
+      font-size: 15px;
+    }
