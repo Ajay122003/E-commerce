@@ -72,41 +72,59 @@
         <div class="row g-3">
 
           <!-- Match Timer -->
-          <div class="col-12 col-md-6">
-            <div class="timer-card p-2">
+         <div class="col-12 col-md-6">
+  <div class="timer-card p-2">
 
-              <div class="d-flex justify-content-between">
-                <div class="timer-title">Match Time</div>
-                <button id="periodBtn" class="btn btn-sm btn-secondary">1st Half</button>
-              </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center">
+      <h6 class="timer-title mb-0">Match Time</h6>
+      <button id="periodBtn" class="btn btn-sm btn-secondary">1st Half</button>
+    </div>
 
-              <div id="matchTime" class="match-time-display mt-2">20:00</div>
+    <!-- Timer Display -->
+    <div id="matchTime" class="match-time-display mt-2 text-center">
+      20:00
+    </div>
 
-              <div class="d-flex flex-wrap gap-2 mt-2">
-                <input id="matchTimeInput" class="time-input" type="number" placeholder="Min" min="1" />
-                <button id="setMatchTime" class="btn btn-info btn-sm">Set</button>
-                <button id="matchStartStop" class="btn btn-success btn-sm">Start</button>
-                <button id="matchReset" class="btn btn-danger btn-sm">Reset</button>
-                
-              </div>
+    <!-- Set / Start / Reset -->
+    <div class="row g-2 mt-2">
 
-              <div class="row g-2 mt-3">
-  <div class="col-6 col-md-4">
-    <button id="timeoutA" class="btn btn-warning btn-sm w-100">Team A Timeout</button>
-  </div>
+      <div class="col-3 col-md-3">
+        <input id="matchTimeInput" class="form-control form-control-sm" type="number" placeholder="Min" min="1" />
+      </div>
 
-  <div class="col-6 col-md-4">
-    <button id="timeoutB" class="btn btn-warning btn-sm w-100">Team B Timeout</button>
-  </div>
+      <div class="col-3 col-md-3">
+        <button id="setMatchTime" class="btn btn-info btn-sm w-100">Set</button>
+      </div>
 
-  <div class="col-12 col-md-4">
-    <button id="timeoutOfficial" class="btn btn-warning btn-sm w-100">Official Timeout</button>
+      <div class="col-3 col-md-3">
+        <button id="matchStartStop" class="btn btn-success btn-sm w-100">Start</button>
+      </div>
+
+      <div class="col-3 col-md-3">
+        <button id="matchReset" class="btn btn-danger btn-sm w-100">Reset</button>
+      </div>
+
+    </div>
+
+    <!-- TIMEOUT BUTTONS -->
+    <div class="row g-2 mt-3">
+      <div class="col-6 col-md-4">
+        <button id="timeoutA" class="btn btn-warning btn-sm w-100">Team A Timeout</button>
+      </div>
+
+      <div class="col-6 col-md-4">
+        <button id="timeoutB" class="btn btn-warning btn-sm w-100">Team B Timeout</button>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <button id="timeoutOfficial" class="btn btn-warning btn-sm w-100">Official Timeout</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
-
-            </div>
-          </div>
 
           <!-- Raid Timer -->
           <div class="col-12 col-md-6">
