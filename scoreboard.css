@@ -152,6 +152,7 @@ body.theme-light .sb-header {
   padding: 10px;
   border-radius: 14px;
   border: 1px solid rgba(148,163,184,0.45);
+  position: relative;
 }
 
 body.theme-light .team-card {
@@ -167,6 +168,24 @@ body.theme-neon .team-a {
 body.theme-neon .team-b {
   border-color: rgba(59,130,246,0.8);
   box-shadow: 0 0 12px rgba(37,99,235,0.45);
+}
+
+/* Raid Indicator on team card */
+.team-card.raiding {
+  box-shadow: 0 0 22px rgba(251,191,36,0.9);
+  border-color: #fbbf24;
+}
+.team-card.raiding::after {
+  content: "RAID";
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: #f97316;
+  color: #111827;
+  font-weight: 600;
 }
 
 /* Team name button */
@@ -295,6 +314,7 @@ body.theme-neon .team-b {
 .btn-3 { background: #ea580c; }
 .btn-def { background: #059669; }
 .btn-allout { background: #dc2626; }
+.btn-bonus { background: #22c55e; color:#022c22; }
 
 .btn:active,
 .btn-pressed {
@@ -624,6 +644,11 @@ body.theme-light .history-item {
   margin-top:10px;
 }
 
+/* Confetti pieces */
+.confetti-piece {
+  pointer-events: none;
+}
+
 /* General hidden */
 .hidden {
   display: none;
@@ -642,9 +667,3 @@ body.theme-light .history-item {
     align-items:flex-start;
   }
 }
-
-
-
-
-
-

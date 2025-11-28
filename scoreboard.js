@@ -19,6 +19,7 @@ const matchOverOverlay = document.getElementById("matchOverOverlay");
 const matchOverWinnerEl = document.getElementById("matchOverWinner");
 const closeMatchOverBtn = document.getElementById("closeMatchOver");
 
+// history / save / undo / pdf
 const undoBtn = document.getElementById("undoBtn");
 const saveMatchBtn = document.getElementById("saveMatchBtn");
 const loadMatchBtn = document.getElementById("loadMatchBtn");
@@ -28,6 +29,9 @@ const downloadPdfBtn = document.getElementById("downloadPdfBtn");
 const timeoutA = document.getElementById("timeoutA");
 const timeoutB = document.getElementById("timeoutB");
 const timeoutOfficial = document.getElementById("timeoutOfficial");
+
+// toss
+const tossBtn = document.getElementById("tossBtn");
 
 // ---------- Utility ----------
 function formatTime(sec) {
@@ -85,6 +89,9 @@ function playBeep(type = "score") {
   } else if (type === "allout") {
     freq = 500;
     duration = 0.4;
+  } else if (type === "raidWarn") {
+    freq = 800;
+    duration = 0.08;
   }
 
   osc.frequency.value = freq;
@@ -113,7 +120,7 @@ document.querySelectorAll(".team-name-btn").forEach((btn) => {
   });
 });
 
-// ---------- PLAYER NAME EDIT (feature 8) ----------
+// ---------- PLAYER NAME EDIT ----------
 document.querySelectorAll(".player-avatar").forEach((avatar) => {
   avatar.addEventListener("click", () => {
     const current = avatar.textContent;
@@ -132,16 +139,33 @@ let playersA = 7;
 let playersB = 7;
 const MAX_PLAYERS = 7;
 
-// UNDO: save simple state before changes
+// current raider for indicator (feature 18)
+let currentRaider = null;
+
+function setRaider(team) {
+  currentRaider = team;
+  document.querySelectorAll(".team-card").forEach((card) =>
+    card.classList.remove("raiding")
+  );
+  const card = document.querySelector(`.team-card.team-${team.toLowerCase()}`);
+  if (card) card.classList.add("raiding");
+}
+
+function switchRaider() {
+  if (!currentRaider) return;
+  setRaider(currentRaider === "A" ? "B" : "A");
+}
+
+// UNDO state history
 const stateHistory = [];
 function saveState() {
   stateHistory.push({
     scoreA,
     scoreB,
     playersA,
-    playersB
+    playersB,
   });
-  if (stateHistory.length > 100) stateHistory.shift();
+  if (stateHistory.length > 200) stateHistory.shift();
 }
 
 function updateScore() {
@@ -161,19 +185,13 @@ function updatePlayersUI() {
   playersBCountEl.textContent = `${playersB}/${MAX_PLAYERS}`;
 
   document.querySelectorAll('.player-avatar[data-team="A"]').forEach((el, idx) => {
-    if (idx < playersA) {
-      el.classList.remove("out");
-    } else {
-      el.classList.add("out");
-    }
+    if (idx < playersA) el.classList.remove("out");
+    else el.classList.add("out");
   });
 
   document.querySelectorAll('.player-avatar[data-team="B"]').forEach((el, idx) => {
-    if (idx < playersB) {
-      el.classList.remove("out");
-    } else {
-      el.classList.add("out");
-    }
+    if (idx < playersB) el.classList.remove("out");
+    else el.classList.add("out");
   });
 }
 
@@ -191,6 +209,7 @@ function getTeamName(team) {
     : (teamBNameEl.textContent || "Team B");
 }
 
+// ---------- Super Tackle check (feature 1) ----------
 function checkAllOut(outTeam, oppTeam) {
   const outCount = outTeam === "A" ? playersA : playersB;
   if (outCount === 0) {
@@ -207,34 +226,47 @@ function checkAllOut(outTeam, oppTeam) {
   }
 }
 
+// raid fail = raider out, defence gets 1 or 2 (super tackle)
 function handleRaidFail(team) {
   saveState();
   const raiderName = getTeamName(team);
   const opponent = team === "A" ? "B" : "A";
   const oppName = getTeamName(opponent);
 
+  // defenders count BEFORE anything
+  const defenders = opponent === "A" ? playersA : playersB;
+  const isSuperTackle = defenders <= 2; // <=2 defenders => super tackle
+
   if (team === "A") playersA = Math.max(0, playersA - 1);
   else playersB = Math.max(0, playersB - 1);
 
-  if (opponent === "A") scoreA += 1;
-  else scoreB += 1;
+  if (opponent === "A") scoreA += isSuperTackle ? 2 : 1;
+  else scoreB += isSuperTackle ? 2 : 1;
 
   updateScore();
   updatePlayersUI();
   pulsePlayers(team);
-  addHistory(`${raiderName} raid FAIL (+1 to ${oppName})`);
+
+  if (isSuperTackle) {
+    addHistory(`SUPER TACKLE by ${oppName}! (+2)`);
+  } else {
+    addHistory(`${raiderName} raid FAIL (+1 to ${oppName})`);
+  }
   playBeep("score");
 
   checkAllOut(team, opponent);
+  switchRaider(); // raid over -> change turn
 }
 
-function handleScore(team, points) {
+// type: "normal" | "bonus" | "super"
+function handleScore(team, points, type = "normal") {
   saveState();
   const name = getTeamName(team);
 
   if (team === "A") scoreA += points;
   else scoreB += points;
 
+  // revive same as points
   for (let i = 0; i < points; i++) {
     if (team === "A") playersA = Math.min(MAX_PLAYERS, playersA + 1);
     else playersB = Math.min(MAX_PLAYERS, playersB + 1);
@@ -243,8 +275,17 @@ function handleScore(team, points) {
   updateScore();
   updatePlayersUI();
   pulsePlayers(team);
-  addHistory(`${name} scored +${points}`);
+
+  if (type === "bonus") {
+    addHistory(`${name} BONUS point (+1)`);
+  } else if (type === "super") {
+    addHistory(`🔥 SUPER RAID by ${name}! (+${points})`);
+  } else {
+    addHistory(`${name} scored +${points}`);
+  }
   playBeep("score");
+
+  switchRaider();
 }
 
 function handleDefense(team) {
@@ -268,6 +309,7 @@ function handleDefense(team) {
   playBeep("score");
 
   checkAllOut(opponent, team);
+  switchRaider();
 }
 
 function handleManualAllOut(team) {
@@ -285,6 +327,13 @@ function handleManualAllOut(team) {
   pulsePlayers("B");
   addHistory(`${name} ALL OUT declared (+2, both teams reset)`);
   playBeep("allout");
+
+  switchRaider();
+}
+
+// Bonus point button (feature 2)
+function handleBonus(team) {
+  handleScore(team, 1, "bonus");
 }
 
 // Attach score buttons
@@ -307,12 +356,20 @@ document.querySelectorAll(".score-buttons .btn").forEach((btn) => {
       return;
     }
 
+    if (action === "bonus") {
+      handleBonus(team);
+      return;
+    }
+
     if (!isNaN(points)) {
       const p = Number(points);
       if (p === 0) {
         handleRaidFail(team);
+      } else if (p >= 3) {
+        // treat 3+ as super raid highlight (feature 3)
+        handleScore(team, p, "super");
       } else {
-        handleScore(team, p);
+        handleScore(team, p, "normal");
       }
     }
   });
@@ -321,7 +378,7 @@ document.querySelectorAll(".score-buttons .btn").forEach((btn) => {
 updateScore();
 updatePlayersUI();
 
-// ---------- UNDO (feature 7) ----------
+// ---------- UNDO ----------
 undoBtn.addEventListener("click", () => {
   if (!stateHistory.length) {
     alert("Nothing to undo");
@@ -369,7 +426,7 @@ document.getElementById("matchStartStop").onclick = () => {
         updateMatchTimer();
 
         if (matchSec <= 10 && matchSec > 0) {
-          matchTimeEl.classList.add("danger-time"); // feature 1
+          matchTimeEl.classList.add("danger-time");
         } else {
           resetDangerBlink();
         }
@@ -450,16 +507,15 @@ matchTimeEl.ondblclick = () => {
 
 updateMatchTimer();
 
-// Period toggle (manual, but now controlled mostly by code)
+// Period toggle (manual info)
 let period = 1;
 periodBtn.addEventListener("click", () => {
-  // manual toggle only informational
   period = period === 1 ? 2 : 1;
   periodBtn.textContent = period === 1 ? "1st Half" : "2nd Half";
   addHistory(`Period indicator set to ${periodBtn.textContent}`);
 });
 
-// ---------- RAID TIMER ----------
+// ---------- RAID TIMER (with last 5s sound) ----------
 let raidSec = 30;
 let raidRun = false;
 let raidInterval;
@@ -483,6 +539,12 @@ document.getElementById("raidStart").onclick = () => {
       if (raidSec > 0) {
         raidSec--;
         updateRaidTimer();
+
+        // last 5 seconds raid warning
+        if (raidSec <= 5 && raidSec > 0) {
+          playBeep("raidWarn");
+        }
+
       } else {
         clearInterval(raidInterval);
         raidRun = false;
@@ -503,7 +565,7 @@ document.getElementById("raidReset").onclick = () => {
 
 updateRaidTimer();
 
-// ---------- TIMEOUT BUTTONS (feature 9) ----------
+// ---------- TIMEOUT BUTTONS ----------
 function handleTimeout(type) {
   if (matchRun) {
     clearInterval(matchInterval);
@@ -528,7 +590,7 @@ document.getElementById("historyClear").onclick = () => {
   historyListEl.innerHTML = "";
 };
 
-// ---------- MATCH SUMMARY + POPUP + CONFETTI (features 2 & 3 & 6) ----------
+// ---------- MATCH SUMMARY + POPUP + CONFETTI ----------
 function showMatchSummary() {
   const teamA = teamANameEl.textContent;
   const teamB = teamBNameEl.textContent;
@@ -595,8 +657,18 @@ function launchConfetti() {
   }
 }
 
-// ---------- SAVE / LOAD MATCH (feature 11) ----------
+// ---------- SAVE / LOAD MATCH (fixed structured history) ----------
 saveMatchBtn.addEventListener("click", () => {
+  const historyData = Array.from(
+    historyListEl.querySelectorAll(".history-item")
+  ).map((item) => {
+    const spans = item.querySelectorAll("span");
+    return {
+      text: spans[0]?.textContent || "",
+      time: spans[1]?.textContent || ""
+    };
+  });
+
   const data = {
     teamA: teamANameEl.textContent,
     teamB: teamBNameEl.textContent,
@@ -604,11 +676,10 @@ saveMatchBtn.addEventListener("click", () => {
     scoreB,
     playersA,
     playersB,
-    history: Array.from(historyListEl.querySelectorAll(".history-item")).map(
-      (item) => item.innerText
-    ),
+    history: historyData,
     savedAt: new Date().toISOString()
   };
+
   localStorage.setItem("kabaddiLastMatch", JSON.stringify(data));
   addHistory("Match saved to browser");
   alert("Match saved. You can load it later.");
@@ -629,23 +700,20 @@ loadMatchBtn.addEventListener("click", () => {
   playersB = data.playersB;
   updateScore();
   updatePlayersUI();
+
   historyListEl.innerHTML = "";
-  data.history.forEach((line) => {
+  (data.history || []).forEach((h) => {
     const div = document.createElement("div");
     div.className = "history-item";
-    const parts = line.split("\t");
-    if (parts.length === 2) {
-      div.innerHTML = `<span>${parts[0]}</span><span>${parts[1]}</span>`;
-    } else {
-      div.textContent = line;
-    }
+    div.innerHTML = `<span>${h.text}</span><span>${h.time}</span>`;
     historyListEl.appendChild(div);
   });
+
   addHistory("Saved match loaded");
   alert("Saved match loaded.");
 });
 
-// ---------- PDF DOWNLOAD (feature 6 - using browser print) ----------
+// ---------- PDF DOWNLOAD ----------
 downloadPdfBtn.addEventListener("click", () => {
   const teamA = teamANameEl.textContent;
   const teamB = teamBNameEl.textContent;
@@ -683,6 +751,25 @@ downloadPdfBtn.addEventListener("click", () => {
   `);
   w.document.close();
   w.focus();
-  w.print();   // user can "Save as PDF"
+  w.print();   // Save as PDF
 });
 
+// ---------- TOSS SYSTEM (feature 6) ----------
+tossBtn.addEventListener("click", () => {
+  const winnerTeam = Math.random() < 0.5 ? "A" : "B";
+  const winnerName = getTeamName(winnerTeam);
+  const raidFirst = confirm(
+    `${winnerName} won the toss!\n\nOK = Choose RAID first\nCancel = Choose DEFEND first`
+  );
+
+  let raider;
+  if (raidFirst) {
+    raider = winnerTeam;
+  } else {
+    raider = winnerTeam === "A" ? "B" : "A";
+  }
+
+  setRaider(raider);
+  addHistory(`${winnerName} won the toss (${raidFirst ? "Raid first" : "Defend first"})`);
+  alert(`${winnerName} won the toss.\n${raidFirst ? "They will raid first." : "They will defend first."}`);
+});
