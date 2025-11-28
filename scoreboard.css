@@ -11,13 +11,13 @@
 /* ===========================
    THEMES
 =========================== */
-body {
+/* body {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 15px;
-}
+} */
 
 /* Dark Theme */
 body.theme-dark {
@@ -42,7 +42,7 @@ body.theme-neon {
 =========================== */
 .scoreboard-wrapper {
   width: 100%;
-  max-width: 1100px;
+  /* max-width: 1100px; */
   background: #111827;
   padding: 15px;
   border-radius: 18px;
