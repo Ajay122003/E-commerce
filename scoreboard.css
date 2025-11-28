@@ -238,35 +238,7 @@ body.theme-light .team-card {
   text-shadow: 0 0 18px rgba(59, 130, 246, 0.85);
 }
 
-/* Score buttons grid (desktop) */
-.score-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.btn-0 { background: #374151; border: none; }
-.btn-1 { background: #16a34a; border: none; }
-.btn-2 { background: #eab308; border: none; color: #111827; }
-.btn-3 { background: #ea580c; border: none; }
-.btn-def { background: #059669; border: none; }
-.btn-allout { background: #dc2626; border: none; }
-.btn-bonus { background: #22c55e; border: none; color: #022c22; }
-
-.score-buttons .btn {
-  font-size: 0.8rem;
-}
-
-/* Score bounce animation (JS adds class) */
-.score-bounce {
-  animation: scoreBounce 0.25s ease-out;
-}
-@keyframes scoreBounce {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
-
+/* 
 /* Player pulse animation */
 .player-change {
   animation: pulsePlayer 0.25s ease-out;
@@ -484,4 +456,3 @@ body.theme-light .history-item {
   font-size: 0.7rem;
   opacity: 0.7;
 }
-

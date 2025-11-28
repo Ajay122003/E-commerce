@@ -15,7 +15,9 @@
 
 <body class="theme-neon">
 
-  <!-- MATCH OVER POPUP -->
+  <!-- =======================
+        MATCH OVER POPUP
+  ======================== -->
   <div id="matchOverOverlay" class="match-over-overlay d-flex hidden">
     <div class="match-over-box text-center">
       <h2 id="matchOverTitle">MATCH OVER 🏁</h2>
@@ -24,200 +26,282 @@
     </div>
   </div>
 
-  <div class="scoreboard-wrapper container">
+  <!-- =======================
+          MAIN WRAPPER
+  ======================== -->
+  <div class="container py-2">
+    <div class="scoreboard-wrapper mx-auto">
 
-    <!-- Header -->
-    <header class="sb-header d-flex justify-content-between align-items-center">
-      <div>
-        <div class="sb-title">Kabaddi Scoreboard</div>
-        <div class="sb-sub">Set match time • Tap match time to start/stop</div>
-      </div>
+      <!-- =======================
+              HEADER
+      ======================== -->
+      <header class="sb-header d-flex flex-wrap justify-content-between align-items-center gap-2">
 
-      <div class="header-right d-flex align-items-center gap-2">
-        <div class="theme-select-wrap">
-          <label>Theme</label>
-          <select id="themeSelect" class="form-select form-select-sm">
-            <option value="theme-dark">Dark</option>
-            <option value="theme-light">Light</option>
-            <option value="theme-neon" selected>PKL Neon</option>
-          </select>
+        <div>
+          <div class="sb-title">TTN Acadamy Scoreboard</div>
+          <div class="sb-sub">Set match time • Tap time to start/stop</div>
         </div>
 
-        <div class="match-info d-flex gap-1">
-          <div class="badge bg-danger badge-live"><span class="dot"></span> LIVE</div>
-          <div class="badge bg-secondary">Kabaddi</div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+
+          <div class="theme-select-wrap">
+            <label>Theme</label>
+            <select id="themeSelect" class="form-select form-select-sm">
+              <option value="theme-dark">Dark</option>
+              <option value="theme-light">Light</option>
+              <option value="theme-neon" selected>PKL Neon</option>
+            </select>
+          </div>
+
+          <div class="d-flex gap-1">
+            <div class="badge bg-danger badge-live"><span class="dot"></span> LIVE</div>
+            <div class="badge bg-secondary">Kabaddi</div>
+          </div>
+
+          <button id="tossBtn" class="btn btn-sm btn-warning">Toss</button>
         </div>
 
-        <!-- Toss button -->
-        <button id="tossBtn" class="btn btn-sm btn-warning">Toss</button>
-      </div>
-    </header>
+      </header>
+      
 
-    <!-- Main -->
-    <div class="sb-main mt-3 row">
+      <!-- =======================
+              CENTER PANEL
+      ======================== -->
+      <div class="center-panel p-3 mt-3">
 
-      <!-- TEAM A -->
-      <div class="col-12 col-md-6 mb-3">
-        <article class="team-card team-a p-2" data-team="A">
+        <div class="row g-3">
 
-          <button class="team-name-btn w-100" data-team="A">
-            <span id="teamAName">Home</span>
-            <span class="edit-label">tap to rename</span>
-          </button>
+          <!-- Match Timer -->
+          <div class="col-12 col-md-6">
+            <div class="timer-card p-2">
 
-          <div class="players-block mt-2">
-            <div class="d-flex justify-content-between">
-              <span class="mini-label">Players</span>
-              <span id="playersACount" class="players-count">7/7</span>
-            </div>
+              <div class="d-flex justify-content-between">
+                <div class="timer-title">Match Time</div>
+                <button id="periodBtn" class="btn btn-sm btn-secondary">1st Half</button>
+              </div>
 
-            <div class="players-row" data-team="A">
-              <div class="player-avatar" data-team="A" data-index="0">A1</div>
-              <div class="player-avatar" data-team="A" data-index="1">A2</div>
-              <div class="player-avatar" data-team="A" data-index="2">A3</div>
-              <div class="player-avatar" data-team="A" data-index="3">A4</div>
-              <div class="player-avatar" data-team="A" data-index="4">A5</div>
-              <div class="player-avatar" data-team="A" data-index="5">A6</div>
-              <div class="player-avatar" data-team="A" data-index="6">A7</div>
-            </div>
-          </div>
+              <div id="matchTime" class="match-time-display mt-2">20:00</div>
 
-          <div class="score-display text-center mt-2">
-            <div class="mini-label">Score</div>
-            <div id="scoreA" class="score-value">0</div>
-          </div>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <input id="matchTimeInput" class="time-input" type="number" placeholder="Min" min="1" />
+                <button id="setMatchTime" class="btn btn-info btn-sm">Set</button>
+                <button id="matchStartStop" class="btn btn-success btn-sm">Start</button>
+                <button id="matchReset" class="btn btn-danger btn-sm">Reset</button>
+                
+              </div>
 
-          <!-- Score buttons -->
-          <div class="score-buttons mt-2">
-            <button class="btn btn-0" data-team="A" data-points="0">+0 Fail</button>
-            <button class="btn btn-1" data-team="A" data-points="1">+1</button>
-            <button class="btn btn-2" data-team="A" data-points="2">+2</button>
-            <button class="btn btn-3" data-team="A" data-points="3">+3</button>
-            <button class="btn btn-def" data-team="A" data-action="defense">DEF</button>
-            <button class="btn btn-allout" data-team="A" data-action="allout">All Out</button>
-            <button class="btn btn-bonus" data-team="A" data-action="bonus">Bonus +1</button>
-          </div>
+              <div class="timeout-row mt-3">
+                <button id="timeoutA" class="btn btn-warning btn-sm  w-100">Team A Timeout</button>
+                <button id="timeoutB" class="btn btn-warning btn-sm w-100">Team B Timeout</button>
+                <button id="timeoutOfficial" class="btn btn-warning btn-sm w-100">Official Timeout</button>
+              </div>
 
-        </article>
-      </div>
-
-      <!-- TEAM B -->
-      <div class="col-12 col-md-6 mb-3">
-        <article class="team-card team-b p-2" data-team="B">
-
-          <button class="team-name-btn w-100" data-team="B">
-            <span id="teamBName">Guest</span>
-            <span class="edit-label">tap to rename</span>
-          </button>
-
-          <div class="players-block mt-2">
-            <div class="d-flex justify-content-between">
-              <span class="mini-label">Players</span>
-              <span id="playersBCount" class="players-count">7/7</span>
-            </div>
-
-            <div class="players-row" data-team="B">
-              <div class="player-avatar" data-team="B">B1</div>
-              <div class="player-avatar" data-team="B">B2</div>
-              <div class="player-avatar" data-team="B">B3</div>
-              <div class="player-avatar" data-team="B">B4</div>
-              <div class="player-avatar" data-team="B">B5</div>
-              <div class="player-avatar" data-team="B">B6</div>
-              <div class="player-avatar" data-team="B">B7</div>
             </div>
           </div>
 
-          <div class="score-display text-center mt-2">
-            <div class="mini-label">Score</div>
-            <div id="scoreB" class="score-value">0</div>
-          </div>
+          <!-- Raid Timer -->
+          <div class="col-12 col-md-6">
+            <div class="raid-card p-2">
+              <div class="d-flex justify-content-between">
+                <div class="raid-title">Raid</div>
+                <div id="raidTime" class="raid-time-display">00:30</div>
+              </div>
 
-          <div class="score-buttons mt-2">
-            <button class="btn btn-0" data-team="B" data-points="0">+0 Fail</button>
-            <button class="btn btn-1" data-team="B" data-points="1">+1</button>
-            <button class="btn btn-2" data-team="B" data-points="2">+2</button>
-            <button class="btn btn-3" data-team="B" data-points="3">+3</button>
-            <button class="btn btn-def" data-team="B" data-action="defense">DEF</button>
-            <button class="btn btn-allout" data-team="B" data-action="allout">All Out</button>
-            <button class="btn btn-bonus" data-team="B" data-action="bonus">Bonus +1</button>
-          </div>
-
-        </article>
-      </div>
-
-      <!-- CENTER PANEL -->
-      <div class="center-panel p-3 mt-2">
-
-        <div class="timer-main-row d-flex flex-wrap">
-
-          <!-- MATCH TIMER -->
-          <div class="timer-card flex-fill me-2 mb-2">
-
-            <div class="timer-header d-flex justify-content-between">
-              <div class="timer-title">Match Time</div>
-              <button id="periodBtn" class="btn btn-sm btn-secondary period-indicator">1st Half</button>
-            </div>
-
-            <div id="matchTime" class="match-time-display">20:00</div>
-
-            <div class="timer-controls mt-1">
-              <input id="matchTimeInput" class="time-input" type="number" placeholder="Min" min="1" />
-              <button id="setMatchTime" class="btn btn-sm btn-info">Set</button>
-              <button id="matchStartStop" class="btn btn-sm btn-success">Start</button>
-              <button id="matchReset" class="btn btn-sm btn-danger">Reset</button>
-            </div>
-
-            <div class="timeout-row mt-2">
-              <button id="timeoutA" class="btn btn-sm btn-warning">Team A Timeout</button>
-              <button id="timeoutB" class="btn btn-sm btn-warning">Team B Timeout</button>
-              <button id="timeoutOfficial" class="btn btn-sm btn-warning">Official Timeout</button>
-            </div>
-
-          </div>
-
-          <!-- RAID -->
-          <div class="raid-card flex-fill mb-2">
-            <div class="raid-header d-flex justify-content-between">
-              <div class="raid-title">Raid</div>
-              <div id="raidTime" class="raid-time-display">00:30</div>
-            </div>
-            <div class="raid-controls mt-1">
-              <button id="raidStart" class="btn btn-sm btn-primary">Start</button>
-              <button id="raidReset" class="btn btn-sm btn-secondary">Reset</button>
+              <div class="d-flex gap-2 mt-2">
+                <button id="raidStart" class="btn btn-primary btn-sm">Start</button>
+                <button id="raidReset" class="btn btn-secondary btn-sm">Reset</button>
+              </div>
             </div>
           </div>
 
         </div>
+      <!-- =======================
+              TEAMS SECTION
+      ======================== -->
+      <div class="row mt-3 g-3">
 
-        <!-- HISTORY -->
-        <div class="history-panel mt-2">
-          <div class="history-header-row d-flex justify-content-between">
+        <!-- TEAM A -->
+        <div class="col-6 col-md-6">
+          <article class="team-card team-a p-2">
+
+            <button class="team-name-btn w-100" data-team="A">
+              <span id="teamAName">Home</span>
+              <span class="edit-label">tap to rename</span>
+            </button>
+
+            <!-- Players -->
+            <div class="players-block mt-2">
+              <div class="d-flex justify-content-between">
+                <span class="mini-label">Players</span>
+                <span id="playersACount" class="players-count">7/7</span>
+              </div>
+
+              <div class="players-row" data-team="A">
+                <div class="player-avatar" data-team="A">A1</div>
+                <div class="player-avatar" data-team="A">A2</div>
+                <div class="player-avatar" data-team="A">A3</div>
+                <div class="player-avatar" data-team="A">A4</div>
+                <div class="player-avatar" data-team="A">A5</div>
+                <div class="player-avatar" data-team="A">A6</div>
+                <div class="player-avatar" data-team="A">A7</div>
+              </div>
+            </div>
+
+            <!-- Score -->
+            <div class="score-display text-center mt-3">
+              <div class="mini-label">Score</div>
+              <div id="scoreA" class="score-value">0</div>
+            </div>
+
+            <!-- Buttons -->
+           <div class="score-buttons mt-3">
+  <div class="row g-2">
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-secondary w-100" data-team="A" data-points="0">+0 Fail</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-success w-100" data-team="A" data-points="1">+1</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-warning w-100" data-team="A" data-points="2">+2</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-danger w-100" data-team="A" data-points="3">+3</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-info w-100" data-team="A" data-action="defense">DEF</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-dark w-100" data-team="A" data-action="allout">All Out</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-primary w-100" data-team="A" data-action="bonus">Bonus +1</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button id="undoBtn" class="btn btn-outline-light w-100">Undo</button>
+    </div>
+
+  </div>
+</div>
+
+
+          </article>
+        </div>
+
+        <!-- TEAM B -->
+        <div class="col-6 col-md-6">
+          <article class="team-card team-b p-2">
+
+            <button class="team-name-btn w-100" data-team="B">
+              <span id="teamBName">Guest</span>
+              <span class="edit-label">tap to rename</span>
+            </button>
+
+            <div class="players-block mt-2">
+              <div class="d-flex justify-content-between">
+                <span class="mini-label">Players</span>
+                <span id="playersBCount" class="players-count">7/7</span>
+              </div>
+
+              <div class="players-row" data-team="B">
+                <div class="player-avatar" data-team="B">B1</div>
+                <div class="player-avatar" data-team="B">B2</div>
+                <div class="player-avatar" data-team="B">B3</div>
+                <div class="player-avatar" data-team="B">B4</div>
+                <div class="player-avatar" data-team="B">B5</div>
+                <div class="player-avatar" data-team="B">B6</div>
+                <div class="player-avatar" data-team="B">B7</div>
+              </div>
+            </div>
+
+            <div class="score-display text-center mt-3">
+              <div class="mini-label">Score</div>
+              <div id="scoreB" class="score-value">0</div>
+            </div>
+
+            <div class="score-buttons mt-3">
+  <div class="row g-2">
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-secondary w-100" data-team="A" data-points="0">+0 Fail</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-success w-100" data-team="A" data-points="1">+1</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-warning w-100" data-team="A" data-points="2">+2</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-danger w-100" data-team="A" data-points="3">+3</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-info w-100" data-team="A" data-action="defense">DEF</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-dark w-100" data-team="A" data-action="allout">All Out</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button class="btn btn-primary w-100" data-team="A" data-action="bonus">Bonus +1</button>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <button id="undoBtn" class="btn btn-outline-light w-100">Undo</button>
+    </div>
+
+  </div>
+</div>
+
+          </article>
+        </div>
+
+      </div>
+
+        <!-- =======================
+                HISTORY
+        ======================== -->
+        <div class="history-panel mt-3">
+          <div class="d-flex justify-content-between">
             <div class="history-title">Match History</div>
             <div class="history-buttons">
-              <button id="undoBtn" class="btn btn-sm btn-outline-light">Undo</button>
-              <button id="saveMatchBtn" class="btn btn-sm btn-outline-light">Save</button>
-              <button id="loadMatchBtn" class="btn btn-sm btn-outline-light">Load</button>
-              <button id="historyClear" class="btn btn-sm btn-outline-light">Clear</button>
+              <button id="saveMatchBtn" class="btn btn-outline-light btn-sm">Save</button>
+              <button id="loadMatchBtn" class="btn btn-outline-light btn-sm">Load</button>
+              <button id="historyClear" class="btn btn-outline-light btn-sm">Clear</button>
             </div>
           </div>
-          <div id="historyList" class="history-list mt-1"></div>
+
+          <div id="historyList" class="history-list mt-2"></div>
         </div>
 
       </div>
 
+      <!-- =======================
+              MATCH SUMMARY
+      ======================== -->
+      <div id="matchSummary" class="match-summary hidden mt-3 text-center">
+        <h3>Match Summary</h3>
+        <p id="summaryText"></p>
+        <button id="downloadPdfBtn" class="btn btn-warning mt-2">Download PDF</button>
+      </div>
+
+      <footer class="sb-footer text-center mt-3">
+        Double tap match time to edit duration • Match ends after 2 halves
+      </footer>
+
     </div>
-
-    <!-- MATCH SUMMARY -->
-    <div id="matchSummary" class="match-summary hidden">
-      <h3>Match Summary</h3>
-      <p id="summaryText"></p>
-      <button id="downloadPdfBtn" class="btn btn-warning mt-2">Download PDF</button>
-    </div>
-
-    <footer class="sb-footer mt-2 text-center">
-      Double tap match time to edit duration • First Half & Second Half complete ⇒ Match Finish
-    </footer>
-
   </div>
 
   <!-- BOOTSTRAP JS -->
@@ -228,4 +312,3 @@
 </body>
 
 </html>
-
