@@ -419,3 +419,6 @@ footer a:hover {
 .sponsor-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10); }
 .sponsor-card img { max-height: 100px; object-fit: contain; margin-bottom: 10px;}
 .sponsor-name {  font-weight: 600;  margin-top: 5px;  font-size: 15px;}
+
+
+

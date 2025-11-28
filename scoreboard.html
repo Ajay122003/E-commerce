@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kabaddi Scoreboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="scoreboard.css" />
+</head>
+<body class="theme-neon">
+
+  <!-- MATCH OVER POPUP + CONFETTI -->
+  <div id="matchOverOverlay" class="match-over-overlay hidden">
+    <div class="match-over-box">
+      <h2 id="matchOverTitle">MATCH OVER 🏁</h2>
+      <p id="matchOverWinner"></p>
+      <button id="closeMatchOver" class="btn-small popup-close-btn">Close</button>
+    </div>
+  </div>
+
+  <div class="scoreboard-wrapper">
+
+    <!-- Header -->
+    <header class="sb-header">
+      <div>
+        <div class="sb-title">Kabaddi Scoreboard</div>
+        <div class="sb-sub">Set match time • Tap match time to start/stop</div>
+      </div>
+
+      <div class="header-right">
+        <div class="theme-select-wrap">
+          <label>Theme</label>
+          <select id="themeSelect">
+            <option value="theme-dark">Dark</option>
+            <option value="theme-light">Light</option>
+            <option value="theme-neon" selected>PKL Neon</option>
+          </select>
+        </div>
+
+        <div class="match-info">
+          <div class="badge badge-live"><span class="dot"></span> LIVE</div>
+          <div class="badge">Kabaddi</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <div class="sb-main">
+
+      <!-- Teams -->
+      <section class="teams-panel">
+
+        <!-- TEAM A -->
+        <article class="team-card team-a" data-team="A">
+
+          <button class="team-name-btn" data-team="A">
+            <span id="teamAName">Home</span>
+            <span class="edit-label">tap to rename</span>
+          </button>
+
+          <div class="players-block">
+            <div class="players-header">
+              <span class="mini-label">Players</span>
+              <span id="playersACount" class="players-count">7/7</span>
+            </div>
+
+            <div class="players-row" data-team="A">
+              <div class="player-avatar" data-team="A" data-index="0">A1</div>
+              <div class="player-avatar" data-team="A" data-index="1">A2</div>
+              <div class="player-avatar" data-team="A" data-index="2">A3</div>
+              <div class="player-avatar" data-team="A" data-index="3">A4</div>
+              <div class="player-avatar" data-team="A" data-index="4">A5</div>
+              <div class="player-avatar" data-team="A" data-index="5">A6</div>
+              <div class="player-avatar" data-team="A" data-index="6">A7</div>
+            </div>
+          </div>
+
+          <div class="score-display">
+            <div class="mini-label">Score</div>
+            <div id="scoreA" class="score-value">0</div>
+          </div>
+
+          <div class="score-buttons">
+            <button class="btn btn-0" data-team="A" data-points="0">+0 Fail</button>
+            <button class="btn btn-1" data-team="A" data-points="1">+1</button>
+            <button class="btn btn-2" data-team="A" data-points="2">+2</button>
+            <button class="btn btn-3" data-team="A" data-points="3">+3</button>
+            <button class="btn btn-def" data-team="A" data-action="defense">DEF</button>
+            <button class="btn btn-allout" data-team="A" data-action="allout">All Out</button>
+          </div>
+
+        </article>
+
+        <!-- TEAM B -->
+        <article class="team-card team-b" data-team="B">
+
+          <button class="team-name-btn" data-team="B">
+            <span id="teamBName">Guest</span>
+            <span class="edit-label">tap to rename</span>
+          </button>
+
+          <div class="players-block">
+            <div class="players-header">
+              <span class="mini-label">Players</span>
+              <span id="playersBCount" class="players-count">7/7</span>
+            </div>
+
+            <div class="players-row" data-team="B">
+              <div class="player-avatar" data-team="B" data-index="0">B1</div>
+              <div class="player-avatar" data-team="B" data-index="1">B2</div>
+              <div class="player-avatar" data-team="B" data-index="2">B3</div>
+              <div class="player-avatar" data-team="B" data-index="3">B4</div>
+              <div class="player-avatar" data-team="B" data-index="4">B5</div>
+              <div class="player-avatar" data-team="B" data-index="5">B6</div>
+              <div class="player-avatar" data-team="B" data-index="6">B7</div>
+            </div>
+          </div>
+
+          <div class="score-display">
+            <div class="mini-label">Score</div>
+            <div id="scoreB" class="score-value">0</div>
+          </div>
+
+          <div class="score-buttons">
+            <button class="btn btn-0" data-team="B" data-points="0">+0 Fail</button>
+            <button class="btn btn-1" data-team="B" data-points="1">+1</button>
+            <button class="btn btn-2" data-team="B" data-points="2">+2</button>
+            <button class="btn btn-3" data-team="B" data-points="3">+3</button>
+            <button class="btn btn-def" data-team="B" data-action="defense">DEF</button>
+            <button class="btn btn-allout" data-team="B" data-action="allout">All Out</button>
+          </div>
+
+        </article>
+
+      </section>
+
+      <!-- CENTER PANEL -->
+      <section class="center-panel">
+
+        <!-- TIMER -->
+        <div class="timer-main-row">
+
+          <div class="timer-card">
+
+            <div class="timer-header">
+              <div class="timer-title">Match Time</div>
+              <button id="periodBtn" class="period-indicator">1st Half</button>
+            </div>
+
+            <div id="matchTime" class="match-time-display">20:00</div>
+
+            <div class="timer-controls">
+              <input 
+                id="matchTimeInput" 
+                class="time-input"
+                type="number" 
+                placeholder="Min"
+                min="1"
+              />
+              <button id="setMatchTime" class="btn-small">Set</button>
+              <button id="matchStartStop" class="btn-small">Start</button>
+              <button id="matchReset" class="btn-small">Reset</button>
+            </div>
+
+            <!-- TIMEOUT BUTTONS -->
+            <div class="timeout-row">
+              <button id="timeoutA" class="btn-small timeout-btn">Team A Timeout</button>
+              <button id="timeoutB" class="btn-small timeout-btn">Team B Timeout</button>
+              <button id="timeoutOfficial" class="btn-small timeout-btn">Official Timeout</button>
+            </div>
+
+          </div>
+
+          <!-- RAID -->
+          <div class="raid-card">
+            <div class="raid-header">
+              <div class="raid-title">Raid</div>
+              <div id="raidTime" class="raid-time-display">00:30</div>
+            </div>
+
+            <div class="raid-controls">
+              <button id="raidStart" class="raid-btn">Start</button>
+              <button id="raidReset" class="raid-btn reset">Reset</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- HISTORY -->
+        <div class="history-panel">
+          <div class="history-header-row">
+            <div class="history-title">Match History</div>
+            <div class="history-buttons">
+              <button id="undoBtn" class="history-clear-btn">Undo</button>
+              <button id="saveMatchBtn" class="history-clear-btn">Save</button>
+              <button id="loadMatchBtn" class="history-clear-btn">Load</button>
+              <button id="historyClear" class="history-clear-btn">Clear</button>
+            </div>
+          </div>
+
+          <div id="historyList" class="history-list"></div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- MATCH SUMMARY -->
+    <div id="matchSummary" class="match-summary hidden">
+      <h3>Match Summary</h3>
+      <p id="summaryText"></p>
+      <button id="downloadPdfBtn" class="btn-small" style="margin-top:10px;">Download Summary (PDF)</button>
+    </div>
+
+    <footer class="sb-footer">
+      Double tap match time to edit duration • First Half & Second Half complete ⇒ Match Finish
+    </footer>
+
+  </div>
+
+  <script src="scoreboard.js"></script>
+</body>
+</html>
+
+
+
+
