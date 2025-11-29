@@ -609,7 +609,7 @@
     </div>
   </div>
 
-  <!-- Bootstrap & dependencies -->
+  <!-- JS LIBRARIES -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- QRCodeJS (for generating QR) -->
@@ -621,8 +621,8 @@
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-  <!-- html5-qrcode (for scanning) -->
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- html5-qrcode (for scanning) – cdnjs (more stable) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 
 <script>
   // ==========================
@@ -877,17 +877,15 @@
       </div>
     `;
 
-    // Generate QR (full details)
+    // Generate QR as JSON (more reliable for scan)
     const qrBox = document.getElementById("qrCodeBox");
     qrBox.innerHTML = "";
-    const qrData = `TeamID: ${team.teamId}
-Team: ${team.teamName}
-Captain: ${team.captainName}
-Phone: ${team.captainPhone}
-District: ${team.district}
-Players: ${team.playersCount}`;
+    const qrPayload = JSON.stringify({
+      type: "TTN_TEAM",
+      teamId: team.teamId,
+    });
     new QRCode(qrBox, {
-      text: qrData,
+      text: qrPayload,
       width: 128,
       height: 128,
     });
@@ -898,7 +896,7 @@ Players: ${team.playersCount}`;
     modal.show();
   }
 
-  // PDF Download
+  // PDF Download (wait a bit so QR renders fully)
   document.getElementById("downloadPdfBtn").addEventListener("click", () => {
     const detail = document.getElementById("detailForPdf");
     if (!detail || currentModalTeamIndex === null) return;
@@ -913,7 +911,11 @@ Players: ${team.playersCount}`;
       html2canvas: { scale: 2 },
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
-    html2pdf().set(opt).from(detail).save();
+
+    // Small delay to make sure QR canvas rendered
+    setTimeout(() => {
+      html2pdf().set(opt).from(detail).save();
+    }, 400);
   });
 
   // ==========================
@@ -994,10 +996,9 @@ Players: ${team.playersCount}`;
         const data = JSON.parse(e.target.result);
         if (data.settings && data.teams) {
           saveSettings(data.settings);
-          // ensure status field exists (fallback)
           const patchedTeams = (data.teams || []).map((t) => ({
-            status: t.status || "Pending",
             ...t,
+            status: t.status || "Pending",
           }));
           saveTeams(patchedTeams);
           if (data.teamCounter) {
@@ -1023,14 +1024,25 @@ Players: ${team.playersCount}`;
   function extractTeamIdFromQr(qrText) {
     if (!qrText) return null;
 
-    // Try to match "TeamID: TTN001"
-    const match = qrText.match(/TeamID:\s*([A-Za-z0-9\-]+)/i);
+    // 1) Try JSON format first
+    try {
+      const obj = JSON.parse(qrText);
+      if (obj && typeof obj === "object") {
+        if (obj.teamId) return String(obj.teamId).toUpperCase();
+        if (obj.TeamID) return String(obj.TeamID).toUpperCase();
+      }
+    } catch (e) {
+      // not JSON, continue
+    }
+
+    // 2) Try "TeamID: TTN001" style
+    const match = qrText.match(/TeamID\s*:\s*([A-Za-z0-9\-]+)/i);
     if (match && match[1]) {
       return match[1].trim().toUpperCase();
     }
 
-    // Fallback: just find TTNxxx pattern anywhere
-    const idMatch = qrText.match(/TTN\d{3,}/i);
+    // 3) Fallback: any TTNxxx pattern
+    const idMatch = qrText.match(/TTN\d{1,}/i);
     if (idMatch) {
       return idMatch[0].toUpperCase();
     }
@@ -1040,6 +1052,7 @@ Players: ${team.playersCount}`;
 
   function handleQrScan(qrText) {
     const statusEl = document.getElementById("qrScanStatus");
+    console.log("Scanned QR text:", qrText);
     const teamId = extractTeamIdFromQr(qrText || "");
 
     if (!teamId) {
@@ -1049,7 +1062,7 @@ Players: ${team.playersCount}`;
     }
 
     const teams = getTeams();
-    const index = teams.findIndex((t) => t.teamId === teamId);
+    const index = teams.findIndex((t) => String(t.teamId).toUpperCase() === teamId);
 
     if (index === -1) {
       statusEl.className = "small mt-2 text-danger";
@@ -1090,12 +1103,10 @@ Players: ${team.playersCount}`;
 
     qrScannerInstance.render(
       (decodedText, decodedResult) => {
-        // Every successful scan
         handleQrScan(decodedText);
       },
       (errorMessage) => {
-        // Optional error callback (kept silent to avoid spam)
-        // console.warn("QR scan error:", errorMessage);
+        // ignore frequent decode errors
       }
     );
   }
@@ -1104,10 +1115,10 @@ Players: ${team.playersCount}`;
   // MAIN EVENTS
   // ==========================
   document.addEventListener("DOMContentLoaded", () => {
-    // When page load, ensure existing teams have status default
+    // Ensure existing teams have status field
     const initialTeams = getTeams().map((t) => ({
-      status: t.status || "Pending",
       ...t,
+      status: t.status || "Pending",
     }));
     saveTeams(initialTeams);
 
@@ -1162,7 +1173,8 @@ Players: ${team.playersCount}`;
       }
 
       // Duplicate checks
-      const duplicateName = teams.some(
+      const teamsNow = getTeams(); // re-read
+      const duplicateName = teamsNow.some(
         (t) => t.teamName.toLowerCase() === form.teamName.toLowerCase()
       );
       if (duplicateName) {
@@ -1172,7 +1184,7 @@ Players: ${team.playersCount}`;
         );
       }
 
-      const duplicatePhone = teams.some(
+      const duplicatePhone = teamsNow.some(
         (t) => t.captainPhone === form.captainPhone
       );
       if (duplicatePhone) {
@@ -1189,8 +1201,8 @@ Players: ${team.playersCount}`;
         status: "Pending",
       };
 
-      teams.push(newTeam);
-      saveTeams(teams);
+      teamsNow.push(newTeam);
+      saveTeams(teamsNow);
 
       // SMS hook
       sendSmsToCaptain(newTeam);
@@ -1206,7 +1218,7 @@ Players: ${team.playersCount}`;
       populateTeamsTable();
 
       // Open modal for receipt + QR + PDF
-      openTeamModal(teams.length - 1);
+      openTeamModal(teamsNow.length - 1);
     });
 
     // ADMIN LOGIN
@@ -1343,5 +1355,6 @@ Players: ${team.playersCount}`;
 </script>
 </body>
 </html>
+
 
 
