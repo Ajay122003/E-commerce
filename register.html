@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kabaddi Tournament - Team Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Icons (optional) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #020617, #0f172a);
+      min-height: 100vh;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    .page-wrapper {
+      padding: 20px 0;
+    }
+
+    .brand-title {
+      letter-spacing: 1px;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(14px);
+    }
+
+    .badge-live {
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 999px;
+    }
+
+    .nav-pills .nav-link.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .form-control,
+    .form-select {
+      background-color: #020617;
+      border-color: #1f2937;
+      color: #e5e7eb;
+      border-radius: 12px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      box-shadow: 0 0 0 0.2rem rgba(34, 197, 94, 0.35);
+      border-color: #22c55e;
+      background-color: #020617;
+      color: #f9fafb;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-gradient:disabled {
+      opacity: 0.7;
+    }
+
+    .btn-outline-soft {
+      border-radius: 999px;
+    }
+
+    .stat-pill {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .table-dark-custom {
+      --bs-table-bg: #020617;
+      --bs-table-striped-bg: #02091a;
+      --bs-table-hover-bg: #050816;
+      color: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .input-helper {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 767.98px) {
+      .glass-card {
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container page-wrapper">
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+      <span class="badge rounded-pill bg-danger badge-live">
+        <i class="bi bi-lightning-charge-fill"></i> KABADDI TOURNAMENT 2025
+      </span>
+      <h1 class="mt-3 mb-1 fw-bold brand-title">
+        Kabaddi Tournament Team Register
+      </h1>
+      <p class="text-secondary mb-2">
+        Register your team • Limited slots • No duplicate team names
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="glass-card p-3 p-md-4 p-lg-5">
+          <!-- Top Row: stats + pills -->
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+            <div class="mb-2 mb-md-0">
+              <div class="d-flex flex-wrap gap-2">
+                <span class="stat-pill">
+                  <i class="bi bi-people-fill me-1"></i>
+                  <span id="registeredCountText">0</span> Teams Registered
+                </span>
+                <span class="stat-pill">
+                  <i class="bi bi-flag-fill me-1"></i>
+                  Max Teams:
+                  <span id="maxTeamsText">--</span>
+                </span>
+              </div>
+            </div>
+            <ul class="nav nav-pills" id="mainTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="register-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#registerTabPane"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-clipboard-plus me-1"></i> Team Register
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="admin-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#adminTabPane"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-shield-lock me-1"></i> Admin
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ALERT AREA -->
+          <div id="alertPlaceholder"></div>
+
+          <div class="tab-content mt-3">
+            <!-- USER REGISTER TAB -->
+            <div
+              class="tab-pane fade show active"
+              id="registerTabPane"
+              role="tabpanel"
+            >
+              <div class="row g-3">
+                <div class="col-12 col-lg-7">
+                  <div class="border rounded-4 p-3 p-md-4 h-100">
+                    <h5 class="fw-semibold mb-3">
+                      <i class="bi bi-pen me-2 text-success"></i>
+                      Team Registration Form
+                    </h5>
+
+                    <form id="teamRegisterForm" novalidate>
+                      <div class="mb-3">
+                        <label class="form-label">Team Name *</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="teamName"
+                          required
+                          maxlength="50"
+                          placeholder="Ex: Rising Warriors"
+                        />
+                        <small class="input-helper">
+                          ⚠ Same team name again register panna mudiyathu.
+                        </small>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">Captain Name *</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="captainName"
+                            required
+                            maxlength="50"
+                            placeholder="Ex: Ajay Kumar"
+                          />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">Captain Mobile *</label>
+                          <input
+                            type="tel"
+                            class="form-control"
+                            id="captainPhone"
+                            required
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            placeholder="10 digit number"
+                          />
+                          <small class="input-helper">
+                            India mobile number (10 digits).
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">Team Email *</label>
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="teamEmail"
+                            required
+                            placeholder="team@example.com"
+                          />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">Category *</label>
+                          <select
+                            id="category"
+                            class="form-select"
+                            required
+                          >
+                            <option value="">Select</option>
+                            <option>Men</option>
+                            <option>Women</option>
+                            <option>Junior (U-19)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">District / Area *</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="district"
+                            required
+                            maxlength="60"
+                            placeholder="Ex: Madurai"
+                          />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label">No. of Players *</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="playersCount"
+                            required
+                            min="7"
+                            max="15"
+                            value="12"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Any Note (optional)</label>
+                        <textarea
+                          id="note"
+                          class="form-control"
+                          rows="2"
+                          maxlength="200"
+                          placeholder="Ex: Need morning slot, jersey color, etc."
+                        ></textarea>
+                      </div>
+
+                      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mt-2">
+                        <div>
+                          <small class="text-warning d-block">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Once registered, team name can't be changed by user.
+                          </small>
+                        </div>
+                        <div class="d-flex gap-2">
+                          <button
+                            type="reset"
+                            class="btn btn-outline-light btn-outline-soft px-3"
+                          >
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Clear
+                          </button>
+                          <button
+                            type="submit"
+                            class="btn btn-gradient px-4"
+                            id="registerBtn"
+                          >
+                            <i class="bi bi-send-fill me-1"></i>
+                            Submit Registration
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Right side info -->
+                <div class="col-12 col-lg-5">
+                  <div class="border rounded-4 p-3 p-md-4 mb-3">
+                    <h6 class="fw-semibold mb-3">
+                      <i class="bi bi-info-circle-fill me-2 text-info"></i>
+                      Tournament Rules (Short)
+                    </h6>
+                    <ul class="small text-secondary mb-2">
+                      <li>One team can register only once (unique team name).</li>
+                      <li>
+                        Slots limited. Once max team reached, online register
+                        close.
+                      </li>
+                      <li>
+                        Admin approval kaprom final confirmation & schedule
+                        email.
+                      </li>
+                      <li>Original ID card compulsory for all players.</li>
+                    </ul>
+                  </div>
+
+                  <div class="border rounded-4 p-3 p-md-4">
+                    <h6 class="fw-semibold mb-2">
+                      <i class="bi bi-envelope-paper-heart me-2 text-success"></i>
+                      Admin Contact
+                    </h6>
+                    <p class="small mb-1 text-secondary">
+                      After registration, details will be mailed to admin email.
+                    </p>
+                    <p class="small mb-0">
+                      <i class="bi bi-envelope me-1"></i>
+                      <span id="adminEmailText">admin@kabaddiclub.com</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ADMIN TAB -->
+            <div
+              class="tab-pane fade"
+              id="adminTabPane"
+              role="tabpanel"
+            >
+              <!-- LOGIN CARD -->
+              <div id="adminLoginCard" class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                  <div class="border rounded-4 p-3 p-md-4">
+                    <h5 class="fw-semibold mb-3">
+                      <i class="bi bi-shield-lock-fill me-2 text-warning"></i>
+                      Admin Login
+                    </h5>
+                    <form id="adminLoginForm">
+                      <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="adminUsername"
+                          required
+                          placeholder="admin"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="adminPassword"
+                          required
+                          placeholder="••••••••"
+                        />
+                        <small class="input-helper">
+                          
+                        </small>
+                      </div>
+                      <button type="submit" class="btn btn-gradient w-100">
+                        <i class="bi bi-door-open-fill me-1"></i>
+                        Login as Admin
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ADMIN PANEL -->
+              <div id="adminPanel" class="mt-3 d-none">
+                <div class="d-flex flex-column flex-md-row justify-content-between mb-3 gap-2">
+                  <div>
+                    <h5 class="fw-semibold mb-1">
+                      <i class="bi bi-speedometer2 me-2 text-success"></i>
+                      Admin Control Panel
+                    </h5>
+                    <p class="small text-secondary mb-0">
+                      Only you (admin) can change max teams and view full
+                      registered list.
+                    </p>
+                  </div>
+                  <button
+                    class="btn btn-outline-light btn-outline-soft btn-sm align-self-md-center"
+                    id="adminLogoutBtn"
+                  >
+                    <i class="bi bi-box-arrow-right me-1"></i>
+                    Logout
+                  </button>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-12 col-lg-4">
+                    <div class="border rounded-4 p-3 p-md-4 h-100">
+                      <h6 class="fw-semibold mb-3">
+                        <i class="bi bi-gear-fill me-2 text-info"></i>
+                        Tournament Settings
+                      </h6>
+
+                      <div class="mb-3">
+                        <label class="form-label">Max Teams Allowed</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="maxTeamsInput"
+                          min="1"
+                          max="128"
+                        />
+                        <small class="input-helper">
+                          Example: 8, 12, 16, 32 ... <br />
+                          Change panna <b>Update</b> press pannunga.
+                        </small>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Admin Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="adminEmailInput"
+                          placeholder="admin@kabaddiclub.com"
+                        />
+                        <small class="input-helper">
+                          Registration form la show aagum & email send
+                          panna use aagum.
+                        </small>
+                      </div>
+
+                      <button
+                        class="btn btn-gradient w-100 mb-2"
+                        id="saveSettingsBtn"
+                      >
+                        <i class="bi bi-check2-circle me-1"></i>
+                        Save Settings
+                      </button>
+
+                      <button
+                        class="btn btn-outline-danger w-100 btn-sm"
+                        id="clearTeamsBtn"
+                      >
+                        <i class="bi bi-trash3 me-1"></i>
+                        Clear All Team Registrations (Test Only)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-lg-8">
+                    <div class="border rounded-4 p-3 p-md-4">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-semibold mb-0">
+                          <i class="bi bi-list-check me-2 text-warning"></i>
+                          Registered Teams
+                        </h6>
+                        <span class="badge bg-secondary">
+                          Total: <span id="adminTotalTeams">0</span>
+                        </span>
+                      </div>
+
+                      <div class="table-responsive">
+                        <table
+                          class="table table-dark table-striped table-hover table-dark-custom align-middle mb-0"
+                        >
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Team</th>
+                              <th>Captain</th>
+                              <th>Phone</th>
+                              <th>Category</th>
+                              <th>District</th>
+                            </tr>
+                          </thead>
+                          <tbody id="teamsTableBody"></tbody>
+                        </table>
+                      </div>
+
+                      <small class="text-secondary d-block mt-2">
+                        Data localStorage la store aagum (browser based demo).
+                        Real project la database + backend use pannunga.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /ADMIN PANEL -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- EmailJS (optional – for sending email to admin) -->
+  <!-- Sign up at emailjs.com, create service & template, then put your IDs below -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <script>
+   // ==========================
+// CONFIG
+// ==========================
+
+// Admin credentials
+const DEMO_ADMIN_USERNAME = "ttnacademy";
+const DEMO_ADMIN_PASSWORD = "ttn2025";
+
+// Defaults
+const DEFAULT_SETTINGS = {
+  maxTeams: 8,
+  adminEmail: "admin@kabaddiclub.com"
+};
+
+// Storage Keys
+const LS_TEAMS_KEY = "kabaddi_teams";
+const LS_SETTINGS_KEY = "kabaddi_settings";
+
+// EmailJS Config (Correct format: must be inside quotes)
+const EMAILJS_PUBLIC_KEY = "pLIgyu0VA0vwUVaql";
+const EMAILJS_SERVICE_ID = "service_oh7fohw";
+const EMAILJS_TEMPLATE_ID = "template_tcbljil";
+
+// Initialize EmailJS once
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+// ==========================
+// UTIL FUNCTIONS
+// ==========================
+
+// Get settings from localStorage OR default
+const getSettings = () =>
+  JSON.parse(localStorage.getItem(LS_SETTINGS_KEY)) || DEFAULT_SETTINGS;
+
+// Save settings
+const saveSettings = (settings) =>
+  localStorage.setItem(LS_SETTINGS_KEY, JSON.stringify(settings));
+
+// Get teams list
+const getTeams = () =>
+  JSON.parse(localStorage.getItem(LS_TEAMS_KEY)) || [];
+
+// Save team list
+const saveTeams = (teams) =>
+  localStorage.setItem(LS_TEAMS_KEY, JSON.stringify(teams));
+
+// Reusable alert
+function showAlert(message, type = "success") {
+  document.getElementById("alertPlaceholder").innerHTML = `
+    <div class="alert alert-${type} alert-dismissible fade show">
+      ${message}
+      <button class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  `;
+}
+
+// Refresh Home page summary
+function refreshSummary() {
+  const settings = getSettings();
+  const teams = getTeams();
+
+  document.getElementById("registeredCountText").textContent = teams.length;
+  document.getElementById("maxTeamsText").textContent = settings.maxTeams;
+  document.getElementById("adminEmailText").textContent = settings.adminEmail;
+
+  const registerBtn = document.getElementById("registerBtn");
+  const full = teams.length >= settings.maxTeams;
+
+  registerBtn.disabled = full;
+  registerBtn.textContent = full
+    ? "Registration Closed (Slots Full)"
+    : "Submit Registration";
+
+  const total = document.getElementById("adminTotalTeams");
+  if (total) total.textContent = teams.length;
+}
+
+// Display all teams in admin panel table
+function populateTeamsTable() {
+  const teams = getTeams();
+  const tbody = document.getElementById("teamsTableBody");
+
+  tbody.innerHTML = teams.length
+    ? teams
+        .map(
+          (t, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${t.teamName}</td>
+        <td>${t.captainName}</td>
+        <td>${t.captainPhone}</td>
+        <td>${t.category}</td>
+        <td>${t.district}</td>
+      </tr>`
+        )
+        .join("")
+    : `<tr><td colspan="6" class="text-center text-secondary">No teams registered yet.</td></tr>`;
+}
+
+// Load admin settings into inputs
+function loadAdminSettingsForm() {
+  const s = getSettings();
+  document.getElementById("maxTeamsInput").value = s.maxTeams;
+  document.getElementById("adminEmailInput").value = s.adminEmail;
+}
+
+// ==========================
+// EMAIL SENDER
+// ==========================
+function sendEmailToAdmin(team) {
+  const settings = getSettings();
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    admin_email: settings.adminEmail,
+    time: new Date().toLocaleString(),
+    team_name: team.teamName,
+    captain_name: team.captainName,
+    captain_phone: team.captainPhone,
+    team_email: team.teamEmail,
+    category: team.category,
+    district: team.district,
+    players_count: team.playersCount,
+    note: team.note || "No note",
+  });
+}
+
+// ==========================
+// MAIN UI EVENTS
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  refreshSummary();
+  populateTeamsTable();
+  loadAdminSettingsForm();
+
+  // ------------------------------
+  // Team Registration Submit
+  // ------------------------------
+  document.getElementById("teamRegisterForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const settings = getSettings();
+    const teams = getTeams();
+
+    if (teams.length >= settings.maxTeams) {
+      return showAlert("Registration slots are full.", "warning");
+    }
+
+    const form = {
+      teamName: document.getElementById("teamName").value.trim(),
+      captainName: document.getElementById("captainName").value.trim(),
+      captainPhone: document.getElementById("captainPhone").value.trim(),
+      teamEmail: document.getElementById("teamEmail").value.trim(),
+      category: document.getElementById("category").value,
+      district: document.getElementById("district").value.trim(),
+      playersCount: document.getElementById("playersCount").value.trim(),
+      note: document.getElementById("note").value.trim(),
+    };
+
+    // Validate required fields
+    if (Object.values(form).some((v) => v === "")) {
+      return showAlert("Please fill all required (*) fields.", "danger");
+    }
+
+    // Phone validation
+    if (!/^[0-9]{10}$/.test(form.captainPhone)) {
+      return showAlert("Mobile number must be 10 digits.", "danger");
+    }
+
+    // Team name duplicate check
+    if (
+      teams.some(
+        (t) => t.teamName.toLowerCase() === form.teamName.toLowerCase()
+      )
+    ) {
+      return showAlert("This team name already registered!", "danger");
+    }
+
+    // Save new team
+    teams.push(form);
+    saveTeams(teams);
+
+    // Send email to admin
+    sendEmailToAdmin(form);
+
+    showAlert("Team registered successfully!", "success");
+    e.target.reset();
+    refreshSummary();
+    populateTeamsTable();
+  });
+
+  // ------------------------------
+  // Admin Login
+  // ------------------------------
+  document.getElementById("adminLoginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const user = document.getElementById("adminUsername").value.trim();
+    const pass = document.getElementById("adminPassword").value.trim();
+
+    if (user === DEMO_ADMIN_USERNAME && pass === DEMO_ADMIN_PASSWORD) {
+      document.getElementById("adminLoginCard").classList.add("d-none");
+      document.getElementById("adminPanel").classList.remove("d-none");
+      populateTeamsTable();
+      loadAdminSettingsForm();
+      showAlert("Admin logged in successfully");
+    } else {
+      showAlert("Invalid admin credentials!", "danger");
+    }
+  });
+
+  // ------------------------------
+  // Admin Logout
+  // ------------------------------
+  document.getElementById("adminLogoutBtn").addEventListener("click", () => {
+    document.getElementById("adminPanel").classList.add("d-none");
+    document.getElementById("adminLoginCard").classList.remove("d-none");
+  });
+
+  // ------------------------------
+  // Save Admin Settings
+  // ------------------------------
+  document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+    const updated = {
+      maxTeams: Number(document.getElementById("maxTeamsInput").value),
+      adminEmail: document.getElementById("adminEmailInput").value.trim(),
+    };
+
+    if (!updated.maxTeams || updated.maxTeams <= 0) {
+      return showAlert("Enter valid max teams.", "danger");
+    }
+
+    if (!updated.adminEmail) {
+      return showAlert("Enter valid admin email.", "danger");
+    }
+
+    saveSettings(updated);
+    refreshSummary();
+    showAlert("Settings updated!");
+  });
+
+  // ------------------------------
+  // Clear All Teams
+  // ------------------------------
+  document.getElementById("clearTeamsBtn")?.addEventListener("click", () => {
+    if (confirm("Clear all registered teams?")) {
+      saveTeams([]);
+      populateTeamsTable();
+      refreshSummary();
+      showAlert("All registrations cleared!", "warning");
+    }
+  });
+});
+
+  </script>
+</body>
+</html>
