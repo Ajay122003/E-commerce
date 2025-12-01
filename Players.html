@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <title>Players Section</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap (Cloudflare CDN – No Blocking) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-  <!-- AOS Animation -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- AOS Animation (Cloudflare CDN – No Blocking) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
   <style>
     :root {
@@ -24,12 +24,13 @@
       padding: 4rem 0 5rem;
     }
 
-    /* Center widening container */
     #players .container {
-      max-width: 1250px !important;
+      padding-left: 12px !important;
+      padding-right: 12px !important;
+      max-width: 1250px;
     }
 
-    /* Section Title */
+    /* =================== TITLE =================== */
     #playersTitle {
       font-size: 2.7rem;
       font-weight: 700;
@@ -43,16 +44,14 @@
 
     /* =================== PLAYER CARD =================== */
     .player-card {
-      padding: 10px !important;      /* extra spacing around card */
+      padding: 8px !important;
     }
 
     .player-card .card {
       border-radius: 15px;
       background: #f8f8f8;
       transition: 0.3s;
-      cursor: pointer;
       overflow: hidden;
-      position: relative;
       border: none;
     }
 
@@ -61,7 +60,6 @@
       box-shadow: 0 12px 25px rgba(0,0,0,0.35);
     }
 
-    /* BIG responsive player images */
     .player-card .card-img-top {
       width: 100%;
       aspect-ratio: 1 / 1.05;
@@ -74,19 +72,29 @@
       transform: scale(1.07);
     }
 
-    /* Mobile BIGGER images */
+    /* ========== MOBILE FIX ========== */
     @media (max-width: 576px) {
-      .player-card .card-img-top {
-        aspect-ratio: 1 / 0.90;   /* taller image on mobile */
-      }
       #playersTitle {
-        font-size: 2.1rem;
+        font-size: 2.2rem;
       }
-    }
 
-    #playerModalImg {
-      border: 3px solid #ffc107;
-      max-width: 180px;
+      .player-card h5 {
+        font-size: 1.2rem !important;
+        font-weight: 600;
+      }
+
+      .player-card p {
+        font-size: 1rem !important;
+      }
+
+      .player-card button {
+        font-size: 1.85rem !important;
+        padding: 6px 10px;
+      }
+
+      .player-card .card-img-top {
+        aspect-ratio: 1 / 0.9;
+      }
     }
 
     /* =================== PAGINATION =================== */
@@ -95,7 +103,7 @@
     }
 
     .pagination .page-item {
-      margin: 0 5px;
+      margin: 0 4px;
     }
 
     .pagination .page-link {
@@ -110,6 +118,11 @@
       color: #000;
       border: none;
     }
+
+    #playerModalImg {
+      border: 3px solid #ffc107;
+      max-width: 380px;
+    }
   </style>
 </head>
 
@@ -119,12 +132,11 @@
 <section id="players">
   <div class="container">
 
-    <!-- ⭐ TEAM TITLE -->
     <h2 id="playersTitle" data-aos="fade-up">TEAM PLAYERS</h2>
 
-    <!-- FILTER BAR -->
+    <!-- FILTERS -->
     <div class="d-flex flex-wrap gap-2 mb-4 justify-content-center">
-      
+
       <input type="text" id="searchInput" class="form-control" placeholder="Search Player..."
         style="max-width:180px;" onkeyup="applyFilters()">
 
@@ -207,7 +219,7 @@ const itemsPerPage = 6;
 let filteredList = [];
 
 function getImage(img){
-  return img && img.trim() !== "" ? img : "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+  return img && img.trim() ? img : "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 }
 
 function applyFilters() {
@@ -240,7 +252,7 @@ function renderPlayers() {
 
   pageItems.forEach(p => {
     grid.innerHTML += `
-      <div class=" col-6 col-md-6 col-lg-3 mb-4 player-card">
+      <div class="col-6 col-md-6 col-lg-3 mb-4 player-card">
         <div class="card">
           ${p.badge ? `<span class="badge bg-warning text-dark position-absolute m-2">${p.badge}</span>` : ""}
           <img src="${getImage(p.image)}" class="card-img-top">
@@ -280,7 +292,8 @@ function openPlayerModal(i){
   document.getElementById("playerModalName").innerText = p.name;
   document.getElementById("playerModalRole").innerText = p.role;
   document.getElementById("playerModalImg").src = getImage(p.image);
-  document.getElementById("playerModalMore").innerHTML = (p.more||[]).map(x=>`<li>• ${x}</li>`).join("");
+  document.getElementById("playerModalMore").innerHTML = (p.more||[])
+    .map(x=>`<li>• ${x}</li>`).join("");
   new bootstrap.Modal(document.getElementById("playerModal")).show();
 }
 
@@ -289,3 +302,5 @@ applyFilters();
 
 </body>
 </html>
+
+

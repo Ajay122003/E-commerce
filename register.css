@@ -1,0 +1,105 @@
+    body {
+      background: linear-gradient(135deg, #020617, #0f172a);
+      min-height: 100vh;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    .page-wrapper {
+      padding: 20px 0;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(14px);
+    }
+
+    .badge-live {
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 999px;
+    }
+
+    .nav-pills .nav-link.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .form-control,
+    .form-select {
+      background-color: #020617;
+      border-color: #1f2937;
+      color: #e5e7eb;
+      border-radius: 12px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      box-shadow: 0 0 0 0.2rem rgba(34, 197, 94, 0.35);
+      border-color: #22c55e;
+      background-color: #020617;
+      color: #f9fafb;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-gradient:disabled {
+      opacity: 0.7;
+    }
+
+    .btn-outline-soft {
+      border-radius: 999px;
+    }
+
+    .stat-pill {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .table-dark-custom {
+      --bs-table-bg: #020617;
+      --bs-table-striped-bg: #02091a;
+      --bs-table-hover-bg: #050816;
+      color: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .input-helper {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 767.98px) {
+      .glass-card {
+        border-radius: 0;
+      }
+    }
+
+    /* Small style for QR scanner container */
+    #qr-reader {
+      width: 100%;
+      max-width: 360px;
+    }
