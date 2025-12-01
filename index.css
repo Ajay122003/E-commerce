@@ -365,7 +365,7 @@ footer a:hover {
 #achievements .team-card p { color: #ddd; font-size: 0.9rem; margin-top: 0.3rem; }
 
 /* ===== Players Section ===== */
-#players { background: var(--bg-gradient); padding: 5rem 0; }
+/* #players { background: var(--bg-gradient); padding: 5rem 0; }
 #players h2 { font-size: 2.5rem; font-weight: 700; color: #ffb400; position: relative; }
 
 .player-card .card {
@@ -386,7 +386,7 @@ footer a:hover {
 
 #playerModal p, #playerModalMore li {color: black; margin-bottom: 0.5rem;}
 #playerModalMore li::before {content: "• "; color: #ffc107;}
-#playerModalImg {border: 3px solid #ffc107; max-width: 180px; }
+#playerModalImg {border: 3px solid #ffc107; max-width: 180px; } */
 
 
 /* ===== Ticker ===== */
