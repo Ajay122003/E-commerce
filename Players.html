@@ -18,12 +18,18 @@
       --bg-gradient: linear-gradient(120deg, #0f0c29, #302b63, #24243e);
     }
 
+    /* =================== SECTION =================== */
     #players {
       background: var(--bg-gradient);
       padding: 4rem 0 5rem;
     }
 
-    /* === Section Heading === */
+    /* Center widening container */
+    #players .container {
+      max-width: 1250px !important;
+    }
+
+    /* Section Title */
     #playersTitle {
       font-size: 2.7rem;
       font-weight: 700;
@@ -35,14 +41,19 @@
       text-shadow: 0 0 10px rgba(255,193,7,0.6);
     }
 
-    /* === Player Card === */
+    /* =================== PLAYER CARD =================== */
+    .player-card {
+      padding: 10px !important;      /* extra spacing around card */
+    }
+
     .player-card .card {
       border-radius: 15px;
-      background: #f7f7f7;
+      background: #f8f8f8;
       transition: 0.3s;
       cursor: pointer;
       overflow: hidden;
       position: relative;
+      border: none;
     }
 
     .player-card .card:hover {
@@ -50,10 +61,10 @@
       box-shadow: 0 12px 25px rgba(0,0,0,0.35);
     }
 
-    /* 🔥 100% Responsive Player Image */
+    /* BIG responsive player images */
     .player-card .card-img-top {
       width: 100%;
-      aspect-ratio: 1 / 1.2;
+      aspect-ratio: 1 / 1.05;
       object-fit: cover;
       transition: 0.3s ease;
       border-bottom: 1px solid #ddd;
@@ -63,13 +74,13 @@
       transform: scale(1.07);
     }
 
-    /* Mobile adjustments */
+    /* Mobile BIGGER images */
     @media (max-width: 576px) {
       .player-card .card-img-top {
-        aspect-ratio: 1 / 1.3;
+        aspect-ratio: 1 / 0.90;   /* taller image on mobile */
       }
       #playersTitle {
-        font-size: 1.9rem;
+        font-size: 2.1rem;
       }
     }
 
@@ -77,12 +88,34 @@
       border: 3px solid #ffc107;
       max-width: 180px;
     }
+
+    /* =================== PAGINATION =================== */
+    .pagination {
+      margin-top: 28px;
+    }
+
+    .pagination .page-item {
+      margin: 0 5px;
+    }
+
+    .pagination .page-link {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .pagination .active .page-link {
+      background: var(--primary-color);
+      color: #000;
+      border: none;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- Player Section -->
+<!-- =================== PLAYERS SECTION =================== -->
 <section id="players">
   <div class="container">
 
@@ -118,11 +151,17 @@
 
     <!-- PLAYER GRID -->
     <div class="row" id="playersGrid"></div>
+
+    <!-- PAGINATION -->
+    <nav>
+      <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
+
   </div>
 </section>
 
 
-<!-- Player Modal -->
+<!-- =================== PLAYER MODAL =================== -->
 <div class="modal fade" id="playerModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -147,7 +186,7 @@
 AOS.init({ once: true });
 
 const players = [
-  { name: "Aadhi", role: "Defender", image: "image/Aathi.jpg", badge: "Captain", more: ["Strong defense", "Fast reaction"] },
+  { name: "Aadhi", role: "Defender", image: "image/Aathi.jpg", badge: "Captain", more: ["Strong defense"] },
   { name: "Ashva", role: "Allround", image: "image/Ashva.jpg", badge: "Vice-Captain" },
   { name: "Karthi", role: "Raider", image: "image/karthi.jpg" },
   { name: "Suresh", role: "Defender", image: "image/suresh.jpg" },
@@ -163,6 +202,10 @@ const players = [
   { name: "Ajay", role: "Allround", image: "" }
 ];
 
+let currentPage = 1;
+const itemsPerPage = 12;
+let filteredList = [];
+
 function getImage(img){
   return img && img.trim() !== "" ? img : "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 }
@@ -173,55 +216,72 @@ function applyFilters() {
   let sort = document.getElementById("sortBy").value;
   let search = document.getElementById("searchInput").value.toLowerCase();
 
-  let filtered = players
-    .map((p, i) => ({ ...p, originalIndex: i }))
+  filteredList = players
+    .map((p,i)=>({...p, original:i}))
     .filter(p => (role === "all" || p.role === role))
     .filter(p => (badge === "all" || p.badge === badge))
     .filter(p => p.name.toLowerCase().includes(search));
 
-  if (sort === "az") filtered.sort((a,b)=> a.name.localeCompare(b.name));
-  if (sort === "za") filtered.sort((a,b)=> b.name.localeCompare(a.name));
+  if (sort === "az") filteredList.sort((a,b)=> a.name.localeCompare(b.name));
+  if (sort === "za") filteredList.sort((a,b)=> b.name.localeCompare(a.name));
 
-  renderPlayers(filtered);
+  currentPage = 1;
+  renderPlayers();
+  renderPagination();
 }
 
-function renderPlayers(list){
+function renderPlayers() {
   let grid = document.getElementById("playersGrid");
   grid.innerHTML = "";
 
-  list.forEach(p => {
+  let start = (currentPage - 1) * itemsPerPage;
+  let end = start + itemsPerPage;
+  let pageItems = filteredList.slice(start, end);
+
+  pageItems.forEach(p => {
     grid.innerHTML += `
-      <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 player-card">
+      <div class="col-6 col-md-4 col-lg-3 mb-4 player-card">
         <div class="card">
-
           ${p.badge ? `<span class="badge bg-warning text-dark position-absolute m-2">${p.badge}</span>` : ""}
-
           <img src="${getImage(p.image)}" class="card-img-top">
-
           <div class="card-body text-center">
             <h5>${p.name}</h5>
-            <p class="text-secondary">${p.role}</p>
-            <button class="btn btn-sm btn-outline-primary" onclick="openPlayerModal(${p.originalIndex})">View Profile</button>
+            <p>${p.role}</p>
+            <button class="btn btn-sm btn-outline-primary" onclick="openPlayerModal(${p.original})">View Profile</button>
           </div>
-
         </div>
       </div>
     `;
   });
 }
 
-function openPlayerModal(index){
-  const p = players[index];
+function renderPagination(){
+  let totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  let pag = document.getElementById("pagination");
+  pag.innerHTML = "";
 
-  document.getElementById('playerModalName').innerText = p.name;
-  document.getElementById('playerModalRole').innerText = p.role;
-  document.getElementById('playerModalImg').src = getImage(p.image);
+  for(let i=1;i<=totalPages;i++){
+    pag.innerHTML += `
+      <li class="page-item ${i===currentPage?'active':''}">
+        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+      </li>
+    `;
+  }
+}
 
-  let list = document.getElementById('playerModalMore');
-  list.innerHTML = "";
-  (p.more || []).forEach(x => list.innerHTML += `<li>• ${x}</li>`);
+function goToPage(p){
+  currentPage = p;
+  renderPlayers();
+  renderPagination();
+}
 
-  new bootstrap.Modal(document.getElementById('playerModal')).show();
+function openPlayerModal(i){
+  const p = players[i];
+  document.getElementById("playerModalName").innerText = p.name;
+  document.getElementById("playerModalRole").innerText = p.role;
+  document.getElementById("playerModalImg").src = getImage(p.image);
+  document.getElementById("playerModalMore").innerHTML = (p.more||[]).map(x=>`<li>• ${x}</li>`).join("");
+  new bootstrap.Modal(document.getElementById("playerModal")).show();
 }
 
 applyFilters();
@@ -229,4 +289,3 @@ applyFilters();
 
 </body>
 </html>
-
