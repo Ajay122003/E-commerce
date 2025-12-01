@@ -2,1359 +2,1304 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>TTN Academy Tournament - Team Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kabaddi Tournament Registration System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap 5 CSS -->
+  <!-- Bootstrap CSS -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
+
   <!-- Icons -->
   <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   />
+
+  <!-- jsPDF (for PDF download) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- QRCode (for PDF generation) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- html5-qrcode (for camera scanning) -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
     body {
-      background: linear-gradient(135deg, #020617, #0f172a);
+      background: radial-gradient(circle at top, #151b2b, #05060a);
+      color: #f8f9fa;
       min-height: 100vh;
-      color: #f8fafc;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
     }
 
     .page-wrapper {
-      padding: 20px 0;
+      padding: 20px 10px 40px;
     }
 
     .glass-card {
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.7);
     }
 
-    .badge-live {
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-    }
-
-    .nav-pills .nav-link {
+    .badge-pill {
       border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .nav-pills .nav-link.active {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
+    .section-title {
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .border-soft {
+      border: 1px solid rgba(148, 163, 184, 0.45) !important;
     }
 
     .form-label {
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       color: #e5e7eb;
     }
 
     .form-control,
     .form-select {
-      background-color: #020617;
-      border-color: #1f2937;
-      color: #e5e7eb;
-      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.9) !important;
+      border-color: rgba(148, 163, 184, 0.7) !important;
+      color: #e5e7eb !important;
+      font-size: 0.92rem;
     }
 
     .form-control:focus,
     .form-select:focus {
-      box-shadow: 0 0 0 0.2rem rgba(34, 197, 94, 0.35);
-      border-color: #22c55e;
-      background-color: #020617;
-      color: #f9fafb;
+      border-color: #facc15 !important;
+      box-shadow: 0 0 0 0.15rem rgba(250, 204, 21, 0.4) !important;
     }
 
-    .btn-gradient {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      border: none;
-      border-radius: 999px;
+    .stat-card {
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.85));
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #e5e7eb;
+    }
+
+    .required-star {
+      color: #f97373;
+    }
+
+    .error-text {
+      font-size: 0.78rem;
+      color: #fecaca;
+      display: none;
+    }
+
+    .nav-pills .nav-link.active {
+      background: linear-gradient(135deg, #facc15, #f97316);
+      color: #111827 !important;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
 
-    .btn-gradient:disabled {
-      opacity: 0.7;
-    }
-
-    .btn-outline-soft {
+    .nav-pills .nav-link {
+      color: #e5e7eb;
       border-radius: 999px;
+      font-size: 0.86rem;
     }
 
-    .stat-pill {
-      background: rgba(15, 23, 42, 0.9);
+    .status-open {
+      color: #bbf7d0;
+    }
+
+    .status-closed {
+      color: #fecaca;
+    }
+
+    .btn-kabaddi {
+      background: linear-gradient(135deg, #f97316, #facc15);
+      border: none;
+      color: #111827;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .btn-kabaddi:hover {
+      filter: brightness(1.05);
+      color: #020617;
+    }
+
+    .btn-outline-light {
       border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.8);
-      padding: 8px 14px;
-      font-size: 0.75rem;
-      color: #9ca3af;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     .table-dark-custom {
       --bs-table-bg: #020617;
-      --bs-table-striped-bg: #02091a;
-      --bs-table-hover-bg: #050816;
-      color: #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
+      --bs-table-striped-bg: #0f172a;
+      --bs-table-border-color: rgba(148, 163, 184, 0.5);
+      font-size: 0.84rem;
     }
 
-    .input-helper {
+    .badge-status {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .countdown {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+
+    .small-hint {
       font-size: 0.75rem;
       color: #9ca3af;
     }
 
-    @media (max-width: 767.98px) {
-      .glass-card {
-        border-radius: 0;
+    @media (max-width: 576px) {
+      .stat-card {
+        margin-bottom: 10px;
       }
-    }
-
-    /* Small style for QR scanner container */
-    #qr-reader {
-      width: 100%;
-      max-width: 360px;
     }
   </style>
 </head>
 <body>
-  <div class="container page-wrapper">
-    <!-- HEADER -->
-    <div class="text-center mb-4">
-      <span class="badge rounded-pill bg-danger badge-live">
-        <i class="bi bi-lightning-charge-fill"></i> TTN Academy TOURNAMENT 2026
+  <div class="page-wrapper container">
+    <!-- Header -->
+    <div class="text-center mb-3">
+      <span class="badge bg-warning-subtle text-warning-emphasis badge-pill px-3 py-2">
+        TTN Acadamy Tournament Registration
       </span>
-      <h1 class="mt-3 mb-1 fw-bold">
-        TTN Academy Tournament Team Register
-      </h1>
-      <p class="text-secondary mb-1">
-        Register your team • Limited slots • No duplicate team names or number
-      </p>
-      <p class="text-warning small mb-0">
-        Registration closes in:
-        <span id="timerText" class="fw-bold">
-          -- Days  -- Hours  -- Minutes  -- Seconds
-        </span>
-      </p>
+      
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-10">
-        <div class="glass-card p-3 p-md-4 p-lg-5">
-          <!-- Top Row: stats + pills -->
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+    <!-- Navigation: User / Admin / Scan -->
+    <ul class="nav nav-pills justify-content-center mb-3" id="viewTabs">
+      <li class="nav-item">
+        <button class="nav-link active" id="userViewBtn">
+          <i class="fa-solid fa-users"></i> Team Registration
+        </button>
+      </li>
+
+      <li class="nav-item ms-2">
+        <button class="nav-link" id="adminViewBtn">
+          <i class="fa-solid fa-user-shield"></i> Admin Panel
+        </button>
+      </li>
+
+      <li class="nav-item ms-2">
+        <button class="nav-link" id="scanViewBtn">
+          <i class="fa-solid fa-qrcode"></i> Scan QR
+        </button>
+      </li>
+    </ul>
+
+    <!-- === USER VIEW === -->
+    <div id="userView" class="glass-card p-3 p-md-4 mb-4">
+      <!-- Stats -->
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-4">
+          <div class="stat-card h-100 d-flex flex-column justify-content-between">
+            <div class="stat-label">Registration Status</div>
+            <div class="stat-value" id="regStatusText">OPEN</div>
+            <div class="small-hint" id="statusHint">
+              You can register your team now.
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="stat-card h-100">
+            <div class="stat-label mb-1">Time Left (Registration Close)</div>
+            <div id="countdown" class="countdown">-- : -- : -- : --</div>
+            <div class="small-hint">Days : Hrs : Min : Sec</div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="stat-card h-100">
+            <div class="stat-label mb-1">Total Teams Registered</div>
+            <div class="stat-value" id="totalTeams">0</div>
+            <div class="small-hint">(Based on stored data in this browser)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration Form -->
+      <h6 class="section-title mb-2">Team Registration Form</h6>
+      <p class="small-hint mb-3">
+        Fill your team details below. All fields marked with
+        <span class="required-star">*</span> are required.
+      </p>
+
+      <form id="teamForm" class="border-soft rounded-4 p-3 p-md-4">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="teamName" class="form-label">
+              Team Name <span class="required-star">*</span>
+            </label>
+            <input type="text" id="teamName" class="form-control" placeholder="Ex: Warriors Kabaddi Club" />
+            <div class="error-text" data-error="teamName">
+              Please enter team name.
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="captainName" class="form-label">
+              Captain Name <span class="required-star">*</span>
+            </label>
+            <input type="text" id="captainName" class="form-control" placeholder="Ex: Ajay" />
+            <div class="error-text" data-error="captainName">
+              Please enter captain name.
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label for="phone" class="form-label">
+              Phone Number <span class="required-star">*</span>
+            </label>
+            <input type="tel" id="phone" class="form-control" maxlength="10" placeholder="10-digit mobile" />
+            <div class="error-text" data-error="phone">
+              Enter valid 10-digit phone number.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="village" class="form-label">
+              Village <span class="required-star">*</span>
+            </label>
+            <input type="text" id="village" class="form-control" placeholder="Ex: Kovilpalayam" />
+            <div class="error-text" data-error="village">
+              Please enter village.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="district" class="form-label">
+              District <span class="required-star">*</span>
+            </label>
+            <input type="text" id="district" class="form-control" placeholder="Ex: Coimbatore" />
+            <div class="error-text" data-error="district">
+              Please enter district.
+            </div>
+          </div>
+        </div>
+
+        <!-- Declaration -->
+        <div class="form-check mt-3">
+          <input class="form-check-input" type="checkbox" id="agreeCheck" />
+          <label class="form-check-label small" for="agreeCheck">
+            We confirm that all details are true and we agree to follow the tournament rules & decisions.
+          </label>
+          <div class="error-text" data-error="agree">
+            Please accept the declaration to continue.
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
+          <button type="button" id="resetFormBtn" class="btn btn-outline-light btn-sm">
+            <i class="fa-solid fa-rotate-left"></i> Reset
+          </button>
+          <button type="submit" id="submitBtn" class="btn btn-kabaddi btn-sm">
+            <i class="fa-solid fa-paper-plane"></i> Submit Registration
+          </button>
+        </div>
+      </form>
+
+      <!-- Success Card -->
+      <div id="successCard" class="alert alert-success mt-3 mb-0 py-3 d-none">
+        <div class="d-flex justify-content-between align-items-start flex-wrap">
+          <div class="me-3">
+            <h6 class="mb-1 text-success-emphasis text-uppercase small">
+              Registration Successful
+            </h6>
+            <p class="mb-1 small">
+              Your team is registered for the Kabaddi tournament.
+            </p>
+            <p class="mb-1 small">
+              <strong>Registration ID:</strong> <span id="successRegId"></span>
+            </p>
+            <p class="mb-1 small d-none" id="paymentInfo"></p>
+          </div>
+          <div class="text-end">
+            <button class="btn btn-outline-success btn-sm mb-1" id="downloadPdfBtn">
+              <i class="fa-solid fa-file-pdf"></i> Download PDF
+            </button>
+            <br />
+            <button class="btn btn-outline-primary btn-sm" id="emailBtn">
+              <i class="fa-solid fa-envelope"></i> Open Email
+            </button>
+            <p class="small-hint mb-0 mt-1">
+              Auto-email send panna backend thevai (SMTP / API).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === ADMIN VIEW === -->
+    <div id="adminView" class="glass-card p-3 p-md-4 d-none">
+      <h6 class="section-title mb-2">
+        Admin Login & Dashboard
+      </h6>
+
+      <!-- Admin Login Box -->
+      <div id="adminLoginBox" class="border-soft rounded-4 p-3 p-md-4 mb-3">
+        <p class="small-hint mb-2">
+          Demo credentials: <strong>Username:</strong> admin,
+          <strong>Password:</strong> kabaddi123
+        </p>
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label" for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" class="form-control" />
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button id="adminLoginBtn" class="btn btn-kabaddi w-100 btn-sm">
+              <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+          </div>
+        </div>
+        <div id="adminLoginError" class="text-danger small mt-2 d-none">
+          Invalid username or password.
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div id="adminDashboard" class="d-none">
+        <!-- Top row -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+          <div>
+            <h6 class="mb-0 text-warning">Welcome, Admin</h6>
+            <p class="small-hint mb-0">
+              Manage registrations, view teams & control registration window.
+            </p>
+          </div>
+          <div class="mt-2 mt-md-0">
+            <button id="adminLogoutBtn" class="btn btn-outline-light btn-sm">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </button>
+          </div>
+        </div>
+
+        <!-- Registration Control -->
+        <div class="border-soft rounded-4 p-3 mb-3">
+          <h6 class="mb-2 text-uppercase small text-secondary">
+            Registration & Payment Settings
+          </h6>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label for="adminRegStatus" class="form-label">Status</label>
+              <select id="adminRegStatus" class="form-select form-select-sm">
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="adminDeadline" class="form-label">Registration Deadline</label>
+              <input type="datetime-local" id="adminDeadline" class="form-control form-control-sm" />
+              <div class="small-hint">
+                Countdown on user page uses this deadline.
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label for="paymentRequired" class="form-label">Payment?</label>
+              <select id="paymentRequired" class="form-select form-select-sm">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="entryFee" class="form-label">Entry Fee (₹)</label>
+              <input type="number" id="entryFee" class="form-control form-control-sm" placeholder="Ex: 500" />
+            </div>
+          </div>
+          <div class="col-md-3">
+             <label for="maxTeams" class="form-label">Max Teams</label>
+             <input type="number" id="maxTeams" class="form-control form-control-sm" placeholder="Ex: 32" />
+             <div class="small-hint">How many teams can register?</div>
+          </div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-md-8">
+              <label for="paymentNote" class="form-label">Payment Note / Instructions</label>
+              <input
+                type="text"
+                id="paymentNote"
+                class="form-control form-control-sm"
+                placeholder="Ex: Pay on ground / UPI ID: 98xxxx@upi"
+              />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button id="saveSettingsBtn" class="btn btn-kabaddi w-100 btn-sm">
+                <i class="fa-solid fa-floppy-disk"></i> Save Settings
+              </button>
+            </div>
+          </div>
+          <p class="small-hint mt-2 mb-0">
+            Payment pannuma pannatha decide pannradhu admin dhan. User form la payment field illa.
+          </p>
+        </div>
+
+        <!-- Team List -->
+        <div class="border-soft rounded-4 p-3">
+          <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
             <div class="mb-2 mb-md-0">
-              <div class="d-flex flex-wrap gap-2">
-                <span class="stat-pill">
-                  <i class="bi bi-people-fill me-1"></i>
-                  <span id="registeredCountText">0</span> Teams Registered
-                </span>
-                <span class="stat-pill">
-                  <i class="bi bi-flag-fill me-1"></i>
-                  Max Teams:
-                  <span id="maxTeamsText">--</span>
-                </span>
-              </div>
+              <h6 class="mb-0 text-uppercase small text-secondary">
+                Registered Teams
+              </h6>
+              <span class="small-hint" id="teamCountText">0 team(s) found.</span>
             </div>
-            <ul class="nav nav-pills" id="mainTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link active"
-                  id="register-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#registerTabPane"
-                  type="button"
-                  role="tab"
-                >
-                  <i class="bi bi-clipboard-plus me-1"></i> Team Register
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="admin-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#adminTabPane"
-                  type="button"
-                  role="tab"
-                >
-                  <i class="bi bi-shield-lock me-1"></i> Admin
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <!-- ALERT AREA -->
-          <div id="alertPlaceholder"></div>
-
-          <div class="tab-content mt-3">
-            <!-- USER REGISTER TAB -->
-            <div
-              class="tab-pane fade show active"
-              id="registerTabPane"
-              role="tabpanel"
-            >
-              <div class="row g-3">
-                <div class="col-12 col-lg-7">
-                  <div class="border rounded-4 p-3 p-md-4 h-100">
-                    <h5 class="fw-semibold mb-3">
-                      <i class="bi bi-pen me-2 text-success"></i>
-                      Team Registration Form
-                    </h5>
-
-                    <form id="teamRegisterForm" novalidate>
-                      <div class="mb-3">
-                        <label class="form-label">Team Name *</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="teamName"
-                          required
-                          maxlength="50"
-                          placeholder="Ex: Rising Warriors"
-                        />
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Captain Name *</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="captainName"
-                            required
-                            maxlength="50"
-                            placeholder="Ex: Ajay Kumar"
-                          />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">Captain Mobile *</label>
-                          <input
-                            type="tel"
-                            class="form-control"
-                            id="captainPhone"
-                            required
-                            pattern="[0-9]{10}"
-                            maxlength="10"
-                            placeholder="10 digit number"
-                          />
-                          <small class="input-helper">
-                            10 digit India mobile number.
-                          </small>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">District / Area *</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="district"
-                            required
-                            maxlength="60"
-                            placeholder="Ex: Madurai"
-                          />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label">No. of Players *</label>
-                          <input
-                            type="number"
-                            class="form-control"
-                            id="playersCount"
-                            required
-                            min="7"
-                            max="15"
-                            value="12"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="mb-3">
-                        <label class="form-label">Any Note (optional)</label>
-                        <textarea
-                          id="note"
-                          class="form-control"
-                          rows="2"
-                          maxlength="200"
-                          placeholder="Ex: Need morning slot, jersey color, etc."
-                        ></textarea>
-                      </div>
-
-                      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mt-2">
-                        <div>
-                          <small class="text-warning d-block">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Duplicate team name or captain mobile not allowed.
-                          </small>
-                        </div>
-                        <div class="d-flex gap-2">
-                          <button
-                            type="reset"
-                            class="btn btn-outline-light btn-outline-soft px-3"
-                          >
-                            <i class="bi bi-arrow-counterclockwise me-1"></i>
-                            Clear
-                          </button>
-                          <button
-                            type="submit"
-                            class="btn btn-gradient px-4"
-                            id="registerBtn"
-                          >
-                            <i class="bi bi-send-fill me-1"></i>
-                            Submit Registration
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-
-                <!-- Right side info -->
-                <div class="col-12 col-lg-5">
-                  <div class="border rounded-4 p-3 p-md-4 mb-3">
-                    <h6 class="fw-semibold mb-3">
-                      <i class="bi bi-info-circle-fill me-2 text-info"></i>
-                      Tournament Rules (Short)
-                    </h6>
-                    <ul class="small text-secondary mb-2">
-                      <li>Unique team name & unique captain number only.</li>
-                      <li>Limited slots – once full, online register closes.</li>
-                      <li>After admin approval, schedule will be shared.</li>
-                      <li>Original ID card compulsory for all players.</li>
-                    </ul>
-                  </div>
-
-                  <div class="border rounded-4 p-3 p-md-4">
-                    <h6 class="fw-semibold mb-2">
-                      <i class="bi bi-envelope-paper-heart me-2 text-success"></i>
-                      Admin Contact
-                    </h6>
-                    <p class="small mb-1 text-secondary">
-                      After registration, admin can download team details & PDF.
-                    </p>
-                    <p class="small mb-0">
-                      <i class="bi bi-envelope me-1"></i>
-                      <span id="adminEmailText">admin@ttnacademy.com</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- ADMIN TAB -->
-            <div
-              class="tab-pane fade"
-              id="adminTabPane"
-              role="tabpanel"
-            >
-              <!-- LOGIN CARD -->
-              <div id="adminLoginCard" class="row justify-content-center">
-                <div class="col-12 col-md-8 col-lg-6">
-                  <div class="border rounded-4 p-3 p-md-4">
-                    <h5 class="fw-semibold mb-3">
-                      <i class="bi bi-shield-lock-fill me-2 text-warning"></i>
-                      Admin Login
-                    </h5>
-                    <form id="adminLoginForm">
-                      <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="adminUsername"
-                          required
-                          placeholder="ttnacademy"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input
-                          type="password"
-                          class="form-control"
-                          id="adminPassword"
-                          required
-                          placeholder="••••••••"
-                        />
-                      </div>
-                      <button type="submit" class="btn btn-gradient w-100">
-                        <i class="bi bi-door-open-fill me-1"></i>
-                        Login as Admin
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ADMIN PANEL -->
-              <div id="adminPanel" class="mt-3 d-none">
-                <div class="d-flex flex-column flex-md-row justify-content-between mb-3 gap-2">
-                  <div>
-                    <h5 class="fw-semibold mb-1">
-                      <i class="bi bi-speedometer2 me-2 text-success"></i>
-                      Admin Control Panel
-                    </h5>
-                    <p class="small text-secondary mb-0">
-                      Only you (admin) can change settings, scan QR & download backups.
-                    </p>
-                  </div>
-                  <button
-                    class="btn btn-outline-light btn-outline-soft btn-sm align-self-md-center"
-                    id="adminLogoutBtn"
-                  >
-                    <i class="bi bi-box-arrow-right me-1"></i>
-                    Logout
-                  </button>
-                </div>
-
-                <div class="row g-3">
-                  <div class="col-12 col-lg-4">
-                    <div class="border rounded-4 p-3 p-md-4 h-100">
-                      <h6 class="fw-semibold mb-3">
-                        <i class="bi bi-gear-fill me-2 text-info"></i>
-                        Tournament Settings
-                      </h6>
-
-                      <div class="mb-3">
-                        <label class="form-label">Max Teams Allowed</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="maxTeamsInput"
-                          min="1"
-                          max="128"
-                        />
-                        <small class="input-helper">
-                          Example: 8, 12, 16, 32 ...
-                        </small>
-                      </div>
-
-                      <div class="mb-3">
-                        <label class="form-label">Admin Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="adminEmailInput"
-                          placeholder="admin@ttnacademy.com"
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <label class="form-label">Registration Close Date</label>
-                        <input
-                          type="date"
-                          class="form-control"
-                          id="regCloseDateInput"
-                        />
-                        <small class="input-helper">
-                          Empty irundha timer default state la irukkum.
-                        </small>
-                      </div>
-
-                      <div class="mb-3">
-                        <label class="form-label">Registration Close Time</label>
-                        <input
-                          type="time"
-                          class="form-control"
-                          id="regCloseTimeInput"
-                        />
-                        <small class="input-helper">
-                          24-hr format, example: 18:30.
-                        </small>
-                      </div>
-
-                      <button
-                        class="btn btn-gradient w-100 mb-2"
-                        id="saveSettingsBtn"
-                      >
-                        <i class="bi bi-check2-circle me-1"></i>
-                        Save Settings
-                      </button>
-
-                      <button
-                        class="btn btn-outline-danger w-100 btn-sm mb-2"
-                        id="adminResetBtn"
-                      >
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                        RESET All Data (Admin)
-                      </button>
-
-                      <button
-                        class="btn btn-outline-light w-100 btn-sm mb-2"
-                        id="backupBtn"
-                      >
-                        <i class="bi bi-download me-1"></i>
-                        Download Backup (JSON)
-                      </button>
-
-                      <button
-                        class="btn btn-outline-light w-100 btn-sm"
-                        id="restoreBtn"
-                      >
-                        <i class="bi bi-upload me-1"></i>
-                        Restore Backup (JSON)
-                      </button>
-                      <input
-                        type="file"
-                        id="restoreFileInput"
-                        accept="application/json"
-                        class="d-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-lg-8">
-                    <div class="border rounded-4 p-3 p-md-4">
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="fw-semibold mb-0">
-                          <i class="bi bi-list-check me-2 text-warning"></i>
-                          Registered Teams
-                        </h6>
-                        <span class="badge bg-secondary">
-                          Total: <span id="adminTotalTeams">0</span>
-                        </span>
-                      </div>
-
-                      <div class="table-responsive">
-                        <table
-                          class="table table-dark table-striped table-hover table-dark-custom align-middle mb-0"
-                        >
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Team ID</th>
-                              <th>Team</th>
-                              <th>Captain</th>
-                              <th>Phone</th>
-                              <th>District</th>
-                              <th>Status</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody id="teamsTableBody"></tbody>
-                        </table>
-                      </div>
-
-                      <small class="text-secondary d-block mt-2">
-                        Data localStorage la store aagum (browser based demo).
-                        Real project la database + backend + SMS / Email API use pannunga.
-                      </small>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- QR SCAN SECTION -->
-                <div class="row g-3 mt-3">
-                  <div class="col-12">
-                    <div class="border rounded-4 p-3 p-md-4">
-                      <h6 class="fw-semibold mb-2">
-                        <i class="bi bi-qr-code-scan me-2 text-success"></i>
-                        Entry QR Scan Verification
-                      </h6>
-                      <p class="small text-secondary mb-2">
-                        Gate la use pannunga. QR code scan panna:
-                        <br />
-                        ✔ Valid & first time -> <b>Approved</b> (status change)<br />
-                        ⚠ Already approved -> <b>Already scanned</b><br />
-                        ❌ Team match aagalena -> <b>Invalid / Rejected</b>
-                      </p>
-                      <div id="qr-reader" class="border rounded-3 p-2 bg-black bg-opacity-50"></div>
-                      <div id="qrScanStatus" class="small mt-2 text-info"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- /ADMIN PANEL -->
+            <div class="d-flex flex-wrap gap-2">
+              <input
+                type="text"
+                id="searchDistrict"
+                class="form-control form-control-sm"
+                placeholder="Filter by district..."
+              />
+              <button id="exportCsvBtn" class="btn btn-outline-light btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export CSV
+              </button>
             </div>
           </div>
+
+          <div class="table-responsive">
+            <table class="table table-dark table-striped table-dark-custom align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Reg ID</th>
+                  <th>Team</th>
+                  <th>Captain</th>
+                  <th>Phone</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminTeamTable">
+                <tr>
+                  <td colspan="9" class="text-center small text-secondary">
+                    No registrations yet.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small-hint mt-2 mb-0">
+            Data stored in this browser's localStorage. Real multi-device sync ku backend integrate pannalaam.
+          </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- MODAL: TEAM DETAIL + QR + PDF -->
-  <div class="modal fade" id="teamDetailModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-light">
-        <div class="modal-header">
-          <h5 class="modal-title">Team Details</h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-          ></button>
-        </div>
-        <div class="modal-body" id="teamDetailContent">
-          <!-- Filled by JS -->
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline-light btn-sm" id="downloadPdfBtn">
-            <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
-          </button>
-          <button
-            class="btn btn-gradient btn-sm"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
+    <!-- === QR SCANNER VIEW === -->
+    <div id="scanView" class="glass-card p-3 p-md-4 d-none">
+      <h5 class="text-warning mb-2">
+        <i class="fa-solid fa-qrcode"></i> QR Code Scanner
+      </h5>
+
+      <div id="qr-reader" style="width:100%; max-width:400px;"></div>
+
+      <div id="scanResult" class="mt-3 d-none">
+        <h6 class="text-success">Team Found</h6>
+        <p><b>Reg ID:</b> <span id="scanRegId"></span></p>
+        <p><b>Team Name:</b> <span id="scanTeamName"></span></p>
+        <p><b>Captain:</b> <span id="scanCaptain"></span></p>
+        <p><b>Phone:</b> <span id="scanPhone"></span></p>
+        <p><b>Village:</b> <span id="scanVillage"></span></p>
+        <p><b>District:</b> <span id="scanDistrict"></span></p>
+
+        <button class="btn btn-success btn-sm mt-2" id="scanVerifyBtn">Verify</button>
+        <button class="btn btn-danger btn-sm mt-2" id="scanRejectBtn">Reject</button>
       </div>
+
+      <p class="small text-secondary mt-3">
+        Use back camera for best results. Scan PDF la irukkura QR.
+      </p>
     </div>
   </div>
 
-  <!-- JS LIBRARIES -->
+  <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- QRCodeJS (for generating QR) -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script>
+    // ================== SIMPLE CONFIG ==================
+    const ADMIN_EMAIL = "organizer@example.com"; // email open button-ku
+    const STORAGE_KEY_TEAMS = "kabaddiTeams_simple";
+    const STORAGE_KEY_SETTINGS = "kabaddiSettings_simple";
+    const DEFAULT_ADMIN_USER = "admin";
+    const DEFAULT_ADMIN_PASS = "kabaddi123";
 
-  <!-- html2pdf for PDF -->
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-  <!-- html5-qrcode (for scanning) – cdnjs (more stable) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-
-<script>
-  // ==========================
-  // CONFIG
-  // ==========================
-  const DEMO_ADMIN_USERNAME = "ttnacademy";
-  const DEMO_ADMIN_PASSWORD = "ttn2025";
-
-  const DEFAULT_SETTINGS = {
-    maxTeams: 8,
-    adminEmail: "admin@ttnacademy.com",
-    registrationCloseDate: "", // yyyy-mm-dd
-    registrationCloseTime: "", // HH:MM
-  };
-
-  const LS_TEAMS_KEY = "kabaddi_teams";
-  const LS_SETTINGS_KEY = "kabaddi_settings";
-  const LS_TEAM_COUNTER_KEY = "kabaddi_team_counter";
-
-  // EmailJS Config
-  const EMAILJS_PUBLIC_KEY = "pLIgyu0VA0vwUVaql";
-  const EMAILJS_SERVICE_ID = "service_oh7fohw";
-  const EMAILJS_TEMPLATE_ID = "template_tcbljil";
-
-  // Init EmailJS
-  if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY) {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-  }
-
-  // ==========================
-  // STORAGE HELPERS
-  // ==========================
-  function getSettings() {
-    try {
-      const stored = localStorage.getItem(LS_SETTINGS_KEY);
-      const base = stored ? JSON.parse(stored) : {};
-      return { ...DEFAULT_SETTINGS, ...base };
-    } catch (e) {
-      return { ...DEFAULT_SETTINGS };
-    }
-  }
-
-  function saveSettings(settings) {
-    localStorage.setItem(LS_SETTINGS_KEY, JSON.stringify(settings));
-  }
-
-  function getTeams() {
-    try {
-      const stored = localStorage.getItem(LS_TEAMS_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveTeams(teams) {
-    localStorage.setItem(LS_TEAMS_KEY, JSON.stringify(teams));
-  }
-
-  function getNextTeamId() {
-    let counter = parseInt(localStorage.getItem(LS_TEAM_COUNTER_KEY) || "0", 10);
-    counter += 1;
-    localStorage.setItem(LS_TEAM_COUNTER_KEY, String(counter));
-    return "TTN" + String(counter).padStart(3, "0"); // TTN001...
-  }
-
-  // ==========================
-  // REGISTRATION END TIME (ADMIN CONTROLLED)
-  // ==========================
-  function getRegistrationEndTime() {
-    const settings = getSettings();
-    const d = settings.registrationCloseDate;
-    const t = settings.registrationCloseTime;
-
-    if (!d || !t) {
-      return null;
-    }
-
-    const isoString = d + "T" + t + ":00";
-    const end = new Date(isoString);
-    if (isNaN(end.getTime())) {
-      return null;
-    }
-    return end;
-  }
-
-  // ==========================
-  // ALERT
-  // ==========================
-  function showAlert(message, type = "success") {
-    const box = document.getElementById("alertPlaceholder");
-    box.innerHTML = `
-      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    `;
-  }
-
-  // ==========================
-  // SUMMARY UPDATE
-  // ==========================
-  function refreshSummary() {
-    const settings = getSettings();
-    const teams = getTeams();
-
-    document.getElementById("registeredCountText").textContent = teams.length;
-    document.getElementById("maxTeamsText").textContent = settings.maxTeams;
-    document.getElementById("adminEmailText").textContent = settings.adminEmail;
-
-    const registerBtn = document.getElementById("registerBtn");
-    const slotsFull = teams.length >= settings.maxTeams;
-
-    const now = new Date();
-    const end = getRegistrationEndTime();
-    const timeOver = end ? now >= end : false;
-
-    if (slotsFull || timeOver) {
-      registerBtn.disabled = true;
-      registerBtn.textContent = slotsFull
-        ? "Registration Closed (Slots Full)"
-        : "Registration Closed (Time Over)";
-    } else {
-      registerBtn.disabled = false;
-      registerBtn.textContent = "Submit Registration";
-    }
-
-    const total = document.getElementById("adminTotalTeams");
-    if (total) total.textContent = teams.length;
-  }
-
-  // ==========================
-  // TIMER (ADMIN CONTROLLED END TIME)
-  // ==========================
-  function updateTimer() {
-    const el = document.getElementById("timerText");
-    const end = getRegistrationEndTime();
-
-    if (!end) {
-      el.textContent = "-- Days  -- Hours  -- Minutes  -- Seconds";
-      return;
-    }
-
-    const now = new Date();
-    const diff = end - now;
-
-    if (diff <= 0) {
-      el.textContent = "00 Days  00 Hours  00 Minutes  00 Seconds";
-      refreshSummary();
-      return;
-    }
-
-    const totalSeconds = Math.floor(diff / 1000);
-    const days = Math.floor(totalSeconds / (24 * 3600));
-    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    el.textContent =
-      String(days).padStart(2, "0") + " Days  " +
-      String(hours).padStart(2, "0") + " Hours  " +
-      String(minutes).padStart(2, "0") + " Minutes  " +
-      String(seconds).padStart(2, "0") + " Seconds";
-  }
-
-  setInterval(updateTimer, 1000);
-
-  // ==========================
-  // ADMIN TABLE
-  // ==========================
-  function renderStatusBadge(status) {
-    const s = status || "Pending";
-    if (s === "Approved") {
-      return '<span class="badge bg-success">Approved</span>';
-    }
-    return '<span class="badge bg-secondary">Pending</span>';
-  }
-
-  function populateTeamsTable() {
-    const teams = getTeams();
-    const tbody = document.getElementById("teamsTableBody");
-
-    if (!teams.length) {
-      tbody.innerHTML =
-        '<tr><td colspan="8" class="text-center text-secondary">No teams registered yet.</td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = teams
-      .map(
-        (team, index) => `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${team.teamId}</td>
-          <td>${team.teamName}</td>
-          <td>${team.captainName}</td>
-          <td>${team.captainPhone}</td>
-          <td>${team.district}</td>
-          <td>${renderStatusBadge(team.status)}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-outline-light view-team-btn"
-              data-index="${index}"
-            >
-              View / PDF
-            </button>
-          </td>
-        </tr>
-      `
-      )
-      .join("");
-  }
-
-  function loadAdminSettingsForm() {
-    const s = getSettings();
-    document.getElementById("maxTeamsInput").value = s.maxTeams;
-    document.getElementById("adminEmailInput").value = s.adminEmail;
-    document.getElementById("regCloseDateInput").value =
-      s.registrationCloseDate || "";
-    document.getElementById("regCloseTimeInput").value =
-      s.registrationCloseTime || "";
-  }
-
-  // ==========================
-  // TEAM DETAIL MODAL + QR + PDF
-  // ==========================
-  let currentModalTeamIndex = null;
-
-  function openTeamModal(index) {
-    const teams = getTeams();
-    const team = teams[index];
-    if (!team) return;
-    currentModalTeamIndex = index;
-
-    const container = document.getElementById("teamDetailContent");
-    container.innerHTML = `
-      <div id="detailForPdf">
-        <h5>${team.teamName} <span class="badge bg-success ms-2">${team.teamId}</span></h5>
-        <p class="small mb-1">Registered at: ${new Date(
-          team.registeredAt
-        ).toLocaleString()}</p>
-        <hr/>
-        <p class="mb-1"><strong>Captain:</strong> ${team.captainName}</p>
-        <p class="mb-1"><strong>Phone:</strong> ${team.captainPhone}</p>
-        <p class="mb-1"><strong>District:</strong> ${team.district}</p>
-        <p class="mb-1"><strong>Players:</strong> ${team.playersCount}</p>
-        <p class="mb-3"><strong>Note:</strong> ${
-          team.note || "No note provided"
-        }</p>
-        <div class="mb-2"><strong>Team QR Code:</strong></div>
-        <div id="qrCodeBox" class="bg-light p-2 d-inline-block"></div>
-      </div>
-    `;
-
-    // Generate QR as JSON (more reliable for scan)
-    const qrBox = document.getElementById("qrCodeBox");
-    qrBox.innerHTML = "";
-    const qrPayload = JSON.stringify({
-      type: "TTN_TEAM",
-      teamId: team.teamId,
-    });
-    new QRCode(qrBox, {
-      text: qrPayload,
-      width: 128,
-      height: 128,
-    });
-
-    const modal = new bootstrap.Modal(
-      document.getElementById("teamDetailModal")
-    );
-    modal.show();
-  }
-
-  // PDF Download (wait a bit so QR renders fully)
-  document.getElementById("downloadPdfBtn").addEventListener("click", () => {
-    const detail = document.getElementById("detailForPdf");
-    if (!detail || currentModalTeamIndex === null) return;
-
-    const teams = getTeams();
-    const team = teams[currentModalTeamIndex];
-
-    const opt = {
-      margin: 10,
-      filename: `${team.teamId}_${team.teamName}_receipt.pdf`,
-      image: { type: "jpeg", quality: 0.95 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    };
-
-    // Small delay to make sure QR canvas rendered
-    setTimeout(() => {
-      html2pdf().set(opt).from(detail).save();
-    }, 400);
-  });
-
-  // ==========================
-  // SMS HOOK (placeholder)
-  // ==========================
-  function sendSmsToCaptain(team) {
-    console.log(
-      "SMS sent to:",
-      team.captainPhone,
-      "TeamID:",
-      team.teamId,
-      "(hook only - integrate real SMS API)"
-    );
-  }
-
-  // ==========================
-  // EMAIL TO ADMIN (EmailJS)
-  // ==========================
-  function sendEmailToAdmin(team) {
-    const settings = getSettings();
-
-    if (
-      !EMAILJS_PUBLIC_KEY ||
-      !EMAILJS_SERVICE_ID ||
-      !EMAILJS_TEMPLATE_ID ||
-      typeof emailjs === "undefined"
-    ) {
-      console.log("EmailJS not configured properly, skipping email send.");
-      return;
-    }
-
-    const params = {
-      admin_email: settings.adminEmail,
-      time: new Date().toLocaleString(),
-      team_name: team.teamName,
-      team_id: team.teamId,
-      captain_name: team.captainName,
-      captain_phone: team.captainPhone,
-      district: team.district,
-      players_count: team.playersCount,
-      note: team.note || "No note",
-    };
-
-    emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-      .then(() => {
-        console.log("Email sent to admin successfully.");
-      })
-      .catch((err) => {
-        console.error("Failed to send email:", err);
-      });
-  }
-
-  // ==========================
-  // BACKUP / RESTORE
-  // ==========================
-  function downloadBackup() {
-    const data = {
-      settings: getSettings(),
-      teams: getTeams(),
-      teamCounter: localStorage.getItem(LS_TEAM_COUNTER_KEY) || "0",
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ttn_tournament_backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function restoreBackup(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
+    // ================== LOCAL STORAGE HELPERS ==================
+    function loadTeams() {
       try {
-        const data = JSON.parse(e.target.result);
-        if (data.settings && data.teams) {
-          saveSettings(data.settings);
-          const patchedTeams = (data.teams || []).map((t) => ({
-            ...t,
-            status: t.status || "Pending",
-          }));
-          saveTeams(patchedTeams);
-          if (data.teamCounter) {
-            localStorage.setItem(LS_TEAM_COUNTER_KEY, data.teamCounter);
-          }
-          refreshSummary();
-          populateTeamsTable();
-          updateTimer();
-          showAlert("Backup restored successfully!", "success");
-        } else {
-          showAlert("Invalid backup file.", "danger");
-        }
-      } catch (err) {
-        showAlert("Failed to read backup file.", "danger");
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS));
+        return Array.isArray(data) ? data : [];
+      } catch {
+        return [];
       }
-    };
-    reader.readAsText(file);
-  }
+    }
 
-  // ==========================
-  // QR SCAN HELPERS
-  // ==========================
-  function extractTeamIdFromQr(qrText) {
-    if (!qrText) return null;
+    function saveTeams(teams) {
+      localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
+    }
 
-    // 1) Try JSON format first
-    try {
-      const obj = JSON.parse(qrText);
-      if (obj && typeof obj === "object") {
-        if (obj.teamId) return String(obj.teamId).toUpperCase();
-        if (obj.TeamID) return String(obj.TeamID).toUpperCase();
+    function createDefaultSettings() {
+      const now = new Date();
+      const defaultDeadline = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const settings = {
+        status: "open",
+        deadline: defaultDeadline.toISOString(),
+        paymentRequired: "no",
+        entryFee: "",
+        paymentNote: "",
+      };
+      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settings));
+      return settings;
+    }
+
+    function loadSettings() {
+      try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY_SETTINGS));
+        if (data && data.status && data.deadline) return data;
+      } catch {}
+      return createDefaultSettings();
+    }
+
+    function saveSettings(settings) {
+      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settings));
+    }
+
+    // ================== COMMON HELPERS ==================
+    function formatDateTime(dtStr) {
+      if (!dtStr) return "-";
+      const dt = new Date(dtStr);
+      if (isNaN(dt)) return "-";
+      return (
+        dt.toLocaleDateString("en-IN", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }) +
+        " " +
+        dt.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    }
+
+    function generateRegId(index) {
+      const year = new Date().getFullYear();
+      const num = String(index + 1).padStart(3, "0");
+      return `KBD${year}-${num}`;
+
+    }
+
+    function countDownText(deadlineStr) {
+      const now = new Date().getTime();
+      const target = new Date(deadlineStr).getTime();
+      if (isNaN(target) || target <= now) return "00 : 00 : 00 : 00";
+
+      const diff = target - now;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${pad(d)} : ${pad(h)} : ${pad(m)} : ${pad(s)}`;
+
+    }
+
+    function showError(id, show) {
+      const el = document.querySelector(`.error-text[data-error="${id}"]`);
+      if (!el) return;
+      el.style.display = show ? "block" : "none";
+    }
+
+    // ================== ELEMENTS ==================
+    const userViewBtn = document.getElementById("userViewBtn");
+    const adminViewBtn = document.getElementById("adminViewBtn");
+    const scanViewBtn = document.getElementById("scanViewBtn");
+
+    const userView = document.getElementById("userView");
+    const adminView = document.getElementById("adminView");
+    const scanView = document.getElementById("scanView");
+
+    const regStatusText = document.getElementById("regStatusText");
+    const statusHint = document.getElementById("statusHint");
+    const countdownEl = document.getElementById("countdown");
+    const totalTeamsEl = document.getElementById("totalTeams");
+
+    const teamForm = document.getElementById("teamForm");
+    const resetFormBtn = document.getElementById("resetFormBtn");
+    const successCard = document.getElementById("successCard");
+    const successRegId = document.getElementById("successRegId");
+    const paymentInfo = document.getElementById("paymentInfo");
+    const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+    const emailBtn = document.getElementById("emailBtn");
+
+    const teamNameInput = document.getElementById("teamName");
+    const captainNameInput = document.getElementById("captainName");
+    const phoneInput = document.getElementById("phone");
+    const villageInput = document.getElementById("village");
+    const districtInput = document.getElementById("district");
+    const agreeCheck = document.getElementById("agreeCheck");
+
+    // admin
+    const adminLoginBox = document.getElementById("adminLoginBox");
+    const adminDashboard = document.getElementById("adminDashboard");
+    const adminUsername = document.getElementById("adminUsername");
+    const adminPassword = document.getElementById("adminPassword");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminLoginError = document.getElementById("adminLoginError");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+
+    const adminRegStatus = document.getElementById("adminRegStatus");
+    const adminDeadline = document.getElementById("adminDeadline");
+    const paymentRequiredSelect = document.getElementById("paymentRequired");
+    const entryFeeInput = document.getElementById("entryFee");
+    const paymentNoteInput = document.getElementById("paymentNote");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+
+    const adminTeamTable = document.getElementById("adminTeamTable");
+    const teamCountText = document.getElementById("teamCountText");
+    const searchDistrict = document.getElementById("searchDistrict");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+    // scan view
+    const scanResult = document.getElementById("scanResult");
+    const scanRegIdSpan = document.getElementById("scanRegId");
+    const scanTeamNameSpan = document.getElementById("scanTeamName");
+    const scanCaptainSpan = document.getElementById("scanCaptain");
+    const scanPhoneSpan = document.getElementById("scanPhone");
+    const scanVillageSpan = document.getElementById("scanVillage");
+    const scanDistrictSpan = document.getElementById("scanDistrict");
+    const scanVerifyBtn = document.getElementById("scanVerifyBtn");
+    const scanRejectBtn = document.getElementById("scanRejectBtn");
+
+    // QR scanner instance
+    let html5Qr = null;
+    let lastScannedTeam = null;
+
+    // ================== VIEW TOGGLE ==================
+    function stopScanner() {
+      if (html5Qr) {
+        html5Qr.stop().then(() => {
+          html5Qr.clear();
+          html5Qr = null;
+        }).catch(() => {});
       }
-    } catch (e) {
-      // not JSON, continue
     }
 
-    // 2) Try "TeamID: TTN001" style
-    const match = qrText.match(/TeamID\s*:\s*([A-Za-z0-9\-]+)/i);
-    if (match && match[1]) {
-      return match[1].trim().toUpperCase();
-    }
+    userViewBtn.addEventListener("click", () => {
+      stopScanner();
+      userViewBtn.classList.add("active");
+      adminViewBtn.classList.remove("active");
+      scanViewBtn.classList.remove("active");
 
-    // 3) Fallback: any TTNxxx pattern
-    const idMatch = qrText.match(/TTN\d{1,}/i);
-    if (idMatch) {
-      return idMatch[0].toUpperCase();
-    }
-
-    return null;
-  }
-
-  function handleQrScan(qrText) {
-    const statusEl = document.getElementById("qrScanStatus");
-    console.log("Scanned QR text:", qrText);
-    const teamId = extractTeamIdFromQr(qrText || "");
-
-    if (!teamId) {
-      statusEl.className = "small mt-2 text-danger";
-      statusEl.textContent = "❌ Invalid QR: Team ID not found.";
-      return;
-    }
-
-    const teams = getTeams();
-    const index = teams.findIndex((t) => String(t.teamId).toUpperCase() === teamId);
-
-    if (index === -1) {
-      statusEl.className = "small mt-2 text-danger";
-      statusEl.textContent = `❌ Invalid QR: No team found for ID ${teamId}.`;
-      return;
-    }
-
-    const team = teams[index];
-
-    if (team.status === "Approved") {
-      statusEl.className = "small mt-2 text-warning";
-      statusEl.textContent = `⚠ Already scanned: ${team.teamName} (${team.teamId}) is already APPROVED.`;
-      return;
-    }
-
-    // Approve this team now
-    team.status = "Approved";
-    team.scannedAt = new Date().toISOString();
-    teams[index] = team;
-    saveTeams(teams);
-    populateTeamsTable();
-
-    statusEl.className = "small mt-2 text-success";
-    statusEl.textContent = `✅ Approved: ${team.teamName} (${team.teamId}) entry allowed.`;
-  }
-
-  let qrScannerInstance = null;
-
-  function startQrScannerIfNeeded() {
-    if (qrScannerInstance || typeof Html5QrcodeScanner === "undefined") {
-      return;
-    }
-
-    qrScannerInstance = new Html5QrcodeScanner("qr-reader", {
-      fps: 10,
-      qrbox: 250,
+      userView.classList.remove("d-none");
+      adminView.classList.add("d-none");
+      scanView.classList.add("d-none");
     });
 
-    qrScannerInstance.render(
-      (decodedText, decodedResult) => {
-        handleQrScan(decodedText);
-      },
-      (errorMessage) => {
-        // ignore frequent decode errors
-      }
-    );
-  }
+    adminViewBtn.addEventListener("click", () => {
+      stopScanner();
+      adminViewBtn.classList.add("active");
+      userViewBtn.classList.remove("active");
+      scanViewBtn.classList.remove("active");
 
-  // ==========================
-  // MAIN EVENTS
-  // ==========================
-  document.addEventListener("DOMContentLoaded", () => {
-    // Ensure existing teams have status field
-    const initialTeams = getTeams().map((t) => ({
-      ...t,
-      status: t.status || "Pending",
-    }));
-    saveTeams(initialTeams);
-
-    refreshSummary();
-    populateTeamsTable();
-    updateTimer();
-
-    // REGISTER TEAM
-    const teamRegisterForm = document.getElementById("teamRegisterForm");
-    teamRegisterForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const settings = getSettings();
-      const teams = getTeams();
-
-      // Slot check
-      if (teams.length >= settings.maxTeams) {
-        return showAlert(
-          "Registration closed. All team slots are already filled.",
-          "warning"
-        );
-      }
-
-      // Time check (admin-controlled)
-      const end = getRegistrationEndTime();
-      if (end && new Date() >= end) {
-        return showAlert("Registration time is over.", "warning");
-      }
-
-      const form = {
-        teamName: document.getElementById("teamName").value.trim(),
-        captainName: document.getElementById("captainName").value.trim(),
-        captainPhone: document.getElementById("captainPhone").value.trim(),
-        district: document.getElementById("district").value.trim(),
-        playersCount: document.getElementById("playersCount").value.trim(),
-        note: document.getElementById("note").value.trim(),
-      };
-
-      // Basic validation
-      if (
-        !form.teamName ||
-        !form.captainName ||
-        !form.captainPhone ||
-        !form.district ||
-        !form.playersCount
-      ) {
-        return showAlert("Please fill all mandatory (*) fields.", "danger");
-      }
-
-      if (!/^[0-9]{10}$/.test(form.captainPhone)) {
-        return showAlert("Captain mobile must be 10 digits.", "danger");
-      }
-
-      // Duplicate checks
-      const teamsNow = getTeams(); // re-read
-      const duplicateName = teamsNow.some(
-        (t) => t.teamName.toLowerCase() === form.teamName.toLowerCase()
-      );
-      if (duplicateName) {
-        return showAlert(
-          "This team name is already registered. Duplicate not allowed.",
-          "danger"
-        );
-      }
-
-      const duplicatePhone = teamsNow.some(
-        (t) => t.captainPhone === form.captainPhone
-      );
-      if (duplicatePhone) {
-        return showAlert(
-          "This captain mobile number is already used for another team.",
-          "danger"
-        );
-      }
-
-      const newTeam = {
-        teamId: getNextTeamId(),
-        ...form,
-        registeredAt: new Date().toISOString(),
-        status: "Pending",
-      };
-
-      teamsNow.push(newTeam);
-      saveTeams(teamsNow);
-
-      // SMS hook
-      sendSmsToCaptain(newTeam);
-      // Email to admin
-      sendEmailToAdmin(newTeam);
-
-      showAlert(
-        `Team registered successfully! Your Team ID is ${newTeam.teamId}`,
-        "success"
-      );
-      teamRegisterForm.reset();
-      refreshSummary();
-      populateTeamsTable();
-
-      // Open modal for receipt + QR + PDF
-      openTeamModal(teamsNow.length - 1);
+      adminView.classList.remove("d-none");
+      userView.classList.add("d-none");
+      scanView.classList.add("d-none");
     });
 
-    // ADMIN LOGIN
-    document
-      .getElementById("adminLoginForm")
-      .addEventListener("submit", (e) => {
-        e.preventDefault();
-        const user = document.getElementById("adminUsername").value.trim();
-        const pass = document.getElementById("adminPassword").value.trim();
+    scanViewBtn.addEventListener("click", () => {
+      scanViewBtn.classList.add("active");
+      adminViewBtn.classList.remove("active");
+      userViewBtn.classList.remove("active");
 
-        if (
-          user === DEMO_ADMIN_USERNAME &&
-          pass === DEMO_ADMIN_PASSWORD
-        ) {
-          document.getElementById("adminLoginCard").classList.add("d-none");
-          document.getElementById("adminPanel").classList.remove("d-none");
-          loadAdminSettingsForm();
-          populateTeamsTable();
-          showAlert("Admin login successful.", "success");
+      scanView.classList.remove("d-none");
+      userView.classList.add("d-none");
+      adminView.classList.add("d-none");
 
-          // Start QR scanner after login
-          startQrScannerIfNeeded();
-        } else {
-          showAlert("Invalid admin credentials.", "danger");
-        }
-      });
+      startQRScanner();
+    });
 
-    // ADMIN LOGOUT
-    document
-      .getElementById("adminLogoutBtn")
-      .addEventListener("click", () => {
-        document.getElementById("adminPanel").classList.add("d-none");
-        document.getElementById("adminLoginCard").classList.remove("d-none");
-      });
+    // ================== STATUS & STATS ==================
+    function refreshStats() {
+      const teams = loadTeams();
+      totalTeamsEl.textContent = teams.length;
+    }
 
-    // SAVE SETTINGS
-    document
-      .getElementById("saveSettingsBtn")
-      .addEventListener("click", () => {
-        const maxTeamsValue = parseInt(
-          document.getElementById("maxTeamsInput").value,
-          10
-        );
-        const adminEmailValue = document
-          .getElementById("adminEmailInput")
-          .value.trim();
-        const closeDateValue = document
-          .getElementById("regCloseDateInput")
-          .value;
-        const closeTimeValue = document
-          .getElementById("regCloseTimeInput")
-          .value;
+    function refreshStatusAndCountdown() {
+      const settings = loadSettings();
+      const now = new Date().getTime();
+      const deadline = new Date(settings.deadline).getTime();
+      const isOpen = settings.status === "open" && deadline > now;
 
-        if (isNaN(maxTeamsValue) || maxTeamsValue <= 0) {
-          return showAlert(
-            "Please enter a valid max teams (1 or more).",
-            "danger"
-          );
-        }
-
-        if (!adminEmailValue) {
-          return showAlert("Please enter admin email.", "danger");
-        }
-
-        if (
-          (closeDateValue && !closeTimeValue) ||
-          (!closeDateValue && closeTimeValue)
-        ) {
-          return showAlert(
-            "Registration close date & time both fill pannunga or both empty va leave pannunga.",
-            "danger"
-          );
-        }
-
-        const settings = {
-          maxTeams: maxTeamsValue,
-          adminEmail: adminEmailValue,
-          registrationCloseDate: closeDateValue || "",
-          registrationCloseTime: closeTimeValue || "",
-        };
-        saveSettings(settings);
-
-        showAlert("Settings saved successfully.", "success");
-        refreshSummary();
-        updateTimer();
-      });
-
-    // ADMIN RESET
-    document.getElementById("adminResetBtn").addEventListener("click", () => {
-      const confirmText = prompt(
-        "⚠ WARNING: This will DELETE ALL team data & settings.\nType ADMIN-RESET to confirm:"
-      );
-      if (confirmText === "ADMIN-RESET") {
-        saveTeams([]);
-        saveSettings({ ...DEFAULT_SETTINGS });
-        localStorage.setItem(LS_TEAM_COUNTER_KEY, "0");
-        refreshSummary();
-        populateTeamsTable();
-        updateTimer();
-        showAlert("All data successfully RESET!", "warning");
+      if (isOpen) {
+        regStatusText.textContent = "OPEN";
+        regStatusText.classList.add("status-open");
+        regStatusText.classList.remove("status-closed");
+        statusHint.textContent = "You can register your team now.";
       } else {
-        showAlert("Reset cancelled.", "info");
+        regStatusText.textContent = "CLOSED";
+        regStatusText.classList.remove("status-open");
+        regStatusText.classList.add("status-closed");
+        statusHint.textContent =
+          "Registration closed. Please contact admin for any queries.";
       }
-    });
 
-    // BACKUP DOWNLOAD
-    document.getElementById("backupBtn").addEventListener("click", () => {
-      downloadBackup();
-    });
+      countdownEl.textContent = countDownText(settings.deadline);
+      return { isOpen, settings };
+    }
 
-    // BACKUP RESTORE
-    const restoreInput = document.getElementById("restoreFileInput");
-    document.getElementById("restoreBtn").addEventListener("click", () => {
-      restoreInput.click();
-    });
-    restoreInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        restoreBackup(file);
+    // ================== USER FORM SUBMIT ==================
+    teamForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const { isOpen, settings } = refreshStatusAndCountdown();
+
+      if (!isOpen) {
+        alert("Registration is closed. Please contact admin.");
+        return;
       }
-      e.target.value = "";
-    });
 
-    // VIEW TEAM (table action)
-    document
-      .getElementById("teamsTableBody")
-      .addEventListener("click", (e) => {
-        if (e.target.classList.contains("view-team-btn")) {
-          const index = parseInt(e.target.getAttribute("data-index"), 10);
-          openTeamModal(index);
+      let valid = true;
+
+      const requiredFields = [
+        { el: teamNameInput, id: "teamName" },
+        { el: captainNameInput, id: "captainName" },
+        { el: phoneInput, id: "phone" },
+        { el: villageInput, id: "village" },
+        { el: districtInput, id: "district" },
+      ];
+
+      requiredFields.forEach((f) => {
+        if (!f.el.value.trim()) {
+          showError(f.id, true);
+          valid = false;
+        } else {
+          showError(f.id, false);
         }
       });
-  });
-</script>
+
+      const phoneVal = phoneInput.value.trim();
+      if (!/^[0-9]{10}$/.test(phoneVal)) {
+        showError("phone", true);
+        valid = false;
+      }
+
+      if (!agreeCheck.checked) {
+        showError("agree", true);
+        valid = false;
+      } else {
+        showError("agree", false);
+      }
+
+      if (!valid) return;
+
+      const teams = loadTeams();
+      const index = teams.length;
+      const regId = generateRegId(index);
+
+      // duplicate check: same phone + same village+district
+      const already = teams.find(
+        (t) =>
+          t.phone === phoneVal &&
+          t.village.toLowerCase() === villageInput.value.trim().toLowerCase() &&
+          t.district.toLowerCase() === districtInput.value.trim().toLowerCase()
+      );
+      if (already) {
+        alert("This team / phone already registered from same area.");
+        return;
+      }
+
+      const teamObj = {
+        regId,
+        teamName: teamNameInput.value.trim(),
+        captainName: captainNameInput.value.trim(),
+        phone: phoneVal,
+        village: villageInput.value.trim(),
+        district: districtInput.value.trim(),
+        status: "Pending",
+        createdAt: new Date().toISOString(),
+      };
+
+      teams.push(teamObj);
+      saveTeams(teams);
+
+      refreshStats();
+      refreshAdminTable();
+
+      successRegId.textContent = regId;
+
+      if (settings.paymentRequired === "yes") {
+        const feeText = settings.entryFee ? `Entry Fee: ₹${settings.entryFee}` : "Entry fee applicable";
+        const noteText = settings.paymentNote || "";
+        paymentInfo.textContent = `${feeText}. ${noteText.trim()}`;
+        paymentInfo.classList.remove("d-none");
+      } else {
+        paymentInfo.textContent = "Admin set: No entry fee or payment not required.";
+        paymentInfo.classList.remove("d-none");
+      }
+
+      successCard.classList.remove("d-none");
+      successCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    resetFormBtn.addEventListener("click", () => {
+      teamForm.reset();
+      successCard.classList.add("d-none");
+      document.querySelectorAll(".error-text").forEach((e) => {
+        e.style.display = "none";
+      });
+    });
+
+    // ================== PDF GENERATION ==================
+    downloadPdfBtn.addEventListener("click", () => {
+      const regId = successRegId.textContent;
+      const teams = loadTeams();
+      const team = teams.find((t) => t.regId === regId);
+      if (!team) {
+        alert("Team data not found.");
+        return;
+      }
+
+      const settings = loadSettings();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(16);
+      doc.text("Kabaddi Tournament Registration", 14, 18);
+      doc.setFontSize(11);
+      doc.text(`Registration ID: ${team.regId}`, 14, 26);
+
+
+      doc.setFontSize(10);
+      let y = 36;
+
+      const addLine = (label, value) => {
+        doc.text(`${label}: ${value || "-"}`, 14, y);
+        y += 6;
+      };
+
+      addLine("Team Name", team.teamName);
+      addLine("Captain Name", team.captainName);
+      addLine("Phone", team.phone);
+      addLine("Village", team.village);
+      addLine("District", team.district);
+      addLine("Registered At", formatDateTime(team.createdAt));
+      addLine("Status", team.status);
+
+      if (settings.paymentRequired === "yes") {
+        addLine("Payment Required", "YES");
+        addLine("Entry Fee", settings.entryFee ? `₹${settings.entryFee}` : "-");
+        addLine("Payment Note", settings.paymentNote || "-");
+      } else {
+        addLine("Payment Required", "NO");
+      }
+
+      // QR data = just Registration ID (easy for scanner)
+      const qrData = team.regId;
+      const tempDiv = document.createElement("div");
+      const qr = new QRCode(tempDiv, {
+        text: qrData,
+        width: 120,
+        height: 120,
+      });
+
+      setTimeout(() => {
+        try {
+          const img = tempDiv.querySelector("img");
+          if (img) {
+            const imgData = img.src;
+            doc.addImage(imgData, "PNG", 140, 18, 50, 50);
+          }
+          doc.save(`${team.regId}_registration.pdf`);
+
+        } catch (err) {
+          console.error(err);
+          doc.save(`${team.regId}_registration.pdf`);
+
+        }
+      }, 300);
+    });
+
+   // ================== EMAIL (MAILTO) ==================
+emailBtn.addEventListener("click", () => {
+  const regId = successRegId.textContent;
+  const teams = loadTeams();
+  const team = teams.find((t) => t.regId === regId);
+  if (!team) {
+    alert("Team data not found.");
+    return;
+  }
+
+  const settings = loadSettings();
+
+  const toEmail = ADMIN_EMAIL;
+  const subject = encodeURIComponent(
+    `Kabaddi Registration - ${team.regId} - ${team.teamName}`
+  );
+
+  const bodyLines = [
+    "Kabaddi Tournament Registration",
+    "",
+    `Registration ID: ${team.regId}`,
+    `Team Name: ${team.teamName}`,
+    `Captain: ${team.captainName}`,
+    `Phone: ${team.phone}`,
+    `Village: ${team.village}`,
+    `District: ${team.district}`,
+    `Registered At: ${formatDateTime(team.createdAt)}`,
+    `Payment Required: ${settings.paymentRequired === "yes" ? "YES" : "NO"}`,
+  ];
+
+  if (settings.paymentRequired === "yes") {
+    bodyLines.push(`Entry Fee: ${settings.entryFee ? "₹" + settings.entryFee : "-"}`);
+    if (settings.paymentNote) bodyLines.push(`Payment Note: ${settings.paymentNote}`);
+  }
+
+  const body = encodeURIComponent(bodyLines.join("\n"));
+  const mailtoLink = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+  window.location.href = mailtoLink;
+});
+
+    // ================== ADMIN LOGIN ==================
+    let adminLoggedIn = false;
+
+    adminLoginBtn.addEventListener("click", () => {
+      const user = adminUsername.value.trim();
+      const pass = adminPassword.value.trim();
+      if (user === DEFAULT_ADMIN_USER && pass === DEFAULT_ADMIN_PASS) {
+        adminLoggedIn = true;
+        adminLoginBox.classList.add("d-none");
+        adminDashboard.classList.remove("d-none");
+        adminLoginError.classList.add("d-none");
+        loadAdminSettingsIntoUI();
+        refreshAdminTable();
+      } else {
+        adminLoginError.classList.remove("d-none");
+      }
+    });
+
+    adminLogoutBtn.addEventListener("click", () => {
+      adminLoggedIn = false;
+      adminDashboard.classList.add("d-none");
+      adminLoginBox.classList.remove("d-none");
+      adminUsername.value = "";
+      adminPassword.value = "";
+    });
+
+    function loadAdminSettingsIntoUI() {
+      const settings = loadSettings();
+      adminRegStatus.value = settings.status;
+      paymentRequiredSelect.value = settings.paymentRequired || "no";
+      entryFeeInput.value = settings.entryFee || "";
+      paymentNoteInput.value = settings.paymentNote || "";
+
+      const dt = new Date(settings.deadline);
+      if (!isNaN(dt)) {
+        const localISO = new Date(
+          dt.getTime() - dt.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 16);
+        adminDeadline.value = localISO;
+      }
+    }
+
+    saveSettingsBtn.addEventListener("click", () => {
+      const status = adminRegStatus.value;
+      const deadlineVal = adminDeadline.value;
+      if (!deadlineVal) {
+        alert("Please select a deadline datetime.");
+        return;
+      }
+
+      const dt = new Date(deadlineVal);
+      const paymentRequired = paymentRequiredSelect.value;
+      const entryFee = entryFeeInput.value.trim();
+      const paymentNote = paymentNoteInput.value.trim();
+
+      const settings = {
+        status,
+        deadline: dt.toISOString(),
+        paymentRequired,
+        entryFee,
+        paymentNote,
+      };
+      saveSettings(settings);
+      refreshStatusAndCountdown();
+      alert("Settings saved successfully.");
+    });
+
+    // ================== ADMIN TABLE ==================
+    function refreshAdminTable() {
+      const teams = loadTeams();
+      const filterDist = searchDistrict.value.trim().toLowerCase();
+      let filtered = teams;
+
+      if (filterDist) {
+        filtered = teams.filter((t) =>
+          (t.district || "").toLowerCase().includes(filterDist)
+        );
+      }
+
+      teamCountText.textContent = `${filtered.length} team(s) found.`;
+
+
+      if (filtered.length === 0) {
+        adminTeamTable.innerHTML = `
+          <tr>
+            <td colspan="9" class="text-center small text-secondary">
+              No registrations found.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      adminTeamTable.innerHTML = "";
+      filtered.forEach((t, idx) => {
+        const tr = document.createElement("tr");
+
+        const statusBadgeClass =
+          t.status === "Verified"
+            ? "bg-success"
+            : t.status === "Rejected"
+            ? "bg-danger"
+            : "bg-warning text-dark";
+
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td class="small">${t.regId}</td>
+          <td class="small">${t.teamName}</td>
+          <td class="small">${t.captainName}</td>
+          <td class="small">${t.phone}</td>
+          <td class="small">${t.village}, ${t.district}</td>
+          <td>
+            <span class="badge badge-status ${statusBadgeClass}">
+              ${t.status}
+            </span>
+          </td>
+          <td class="small">${formatDateTime(t.createdAt)}</td>
+          <td class="small">
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-success btn-sm" data-action="verify" data-id="${t.regId}">
+                ✓
+              </button>
+              <button class="btn btn-outline-danger btn-sm" data-action="reject" data-id="${t.regId}">
+                ✕
+              </button>
+              <button class="btn btn-outline-info btn-sm" data-action="pdf" data-id="${t.regId}">
+                <i class="fa-solid fa-file-pdf"></i>
+              </button>
+              <button class="btn btn-outline-light btn-sm" data-action="delete" data-id="${t.regId}">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        adminTeamTable.appendChild(tr);
+      });
+    }
+
+    adminTeamTable.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+
+      const action = btn.getAttribute("data-action");
+      const regId = btn.getAttribute("data-id");
+      if (!action || !regId) return;
+
+      const teams = loadTeams();
+      const idx = teams.findIndex((t) => t.regId === regId);
+      if (idx === -1) return;
+
+      if (action === "verify") {
+        teams[idx].status = "Verified";
+        saveTeams(teams);
+        refreshAdminTable();
+      } else if (action === "reject") {
+        teams[idx].status = "Rejected";
+        saveTeams(teams);
+        refreshAdminTable();
+      } else if (action === "delete") {
+        if (confirm("Are you sure to delete this team?")) {
+          teams.splice(idx, 1);
+          saveTeams(teams);
+          refreshStats();
+          refreshAdminTable();
+        }
+      } else if (action === "pdf") {
+        successRegId.textContent = regId;
+        downloadPdfBtn.click();
+      }
+    });
+
+    searchDistrict.addEventListener("input", () => {
+      refreshAdminTable();
+    });
+
+    // ================== CSV EXPORT ==================
+    exportCsvBtn.addEventListener("click", () => {
+      const teams = loadTeams();
+      if (!teams.length) {
+        alert("No registrations to export.");
+        return;
+      }
+
+      const headers = [
+        "Reg ID",
+        "Team Name",
+        "Captain Name",
+        "Phone",
+        "Village",
+        "District",
+        "Status",
+        "Registered At",
+      ];
+
+      const rows = teams.map((t) => [
+        t.regId,
+        t.teamName,
+        t.captainName,
+        t.phone,
+        t.village,
+        t.district,
+        t.status,
+        formatDateTime(t.createdAt),
+      ]);
+
+      let csvContent = headers.join(",") + "\n";
+      rows.forEach((r) => {
+        const row = r
+          .map((x) => `"${String(x || "").replace(/"/g, '""')}"`)
+
+          .join(",");
+        csvContent += row + "\n";
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kabaddi_registrations.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // ================== QR SCAN LOGIC ==================
+    function startQRScanner() {
+      scanResult.classList.add("d-none");
+      lastScannedTeam = null;
+
+      if (html5Qr) {
+        stopScanner();
+      }
+
+      html5Qr = new Html5Qrcode("qr-reader");
+
+      html5Qr
+        .start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 250 },
+          (decodedText) => {
+            const scannedId = decodedText.trim();
+            console.log("QR scanned:", scannedId);
+
+            const teams = loadTeams();
+            const team = teams.find((t) => t.regId === scannedId);
+            if (!team) {
+              alert("No team found for this QR.");
+              return;
+            }
+
+            lastScannedTeam = { team, teams };
+
+            scanRegIdSpan.textContent = team.regId;
+            scanTeamNameSpan.textContent = team.teamName;
+            scanCaptainSpan.textContent = team.captainName;
+            scanPhoneSpan.textContent = team.phone;
+            scanVillageSpan.textContent = team.village;
+            scanDistrictSpan.textContent = team.district;
+
+            scanResult.classList.remove("d-none");
+
+            // Stop after first successful scan
+            stopScanner();
+          },
+          (error) => {
+            // console.warn("Scan error:", error);
+          }
+        )
+        .catch((err) => {
+          console.error("Camera start error:", err);
+          alert("Unable to access camera. Please allow camera permission.");
+        });
+    }
+
+    scanVerifyBtn.addEventListener("click", () => {
+      if (!lastScannedTeam) return;
+      const { team, teams } = lastScannedTeam;
+      const idx = teams.findIndex((t) => t.regId === team.regId);
+      if (idx === -1) return;
+      teams[idx].status = "Verified";
+      saveTeams(teams);
+      alert("Team Verified!");
+      refreshAdminTable();
+    });
+
+    scanRejectBtn.addEventListener("click", () => {
+      if (!lastScannedTeam) return;
+      const { team, teams } = lastScannedTeam;
+      const idx = teams.findIndex((t) => t.regId === team.regId);
+      if (idx === -1) return;
+      teams[idx].status = "Rejected";
+      saveTeams(teams);
+      alert("Team Rejected!");
+      refreshAdminTable();
+    });
+
+    // ================== INITIAL LOAD ==================
+    refreshStats();
+    refreshStatusAndCountdown();
+    refreshAdminTable();
+    setInterval(() => {
+      refreshStatusAndCountdown();
+    }, 1000);
+  </script>
 </body>
 </html>
-
-
-
